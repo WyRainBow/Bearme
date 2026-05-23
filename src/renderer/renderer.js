@@ -174,7 +174,8 @@ pet.addEventListener('mouseenter', () => {
 
   const ringsCanvas = document.getElementById('codex-rings-canvas');
   if (ringsCanvas) ringsCanvas.classList.add('hoverable');
-  
+  if (window.codexRings) window.codexRings.show();
+
   // 显示UI元素
   const interactionButtons = document.querySelector('#interaction-buttons');
   
@@ -239,6 +240,7 @@ function hideAllUI() {
   const messagePopup = document.querySelector('#message-popup');
   const ringsCanvas = document.getElementById('codex-rings-canvas');
   if (ringsCanvas) ringsCanvas.classList.remove('hoverable');
+  if (window.codexRings) window.codexRings.hide();
   
   // 如果没有显示消息弹窗，才恢复点击穿透
   if (messagePopup.classList.contains('hidden')) {
