@@ -195,6 +195,42 @@
         ctx.fillText(text, bx + px, by + 13);
       }
 
+      function drawUsageNumbers(primaryRemaining, secondaryRemaining) {
+        var labelY = CY - 8;
+        var valueY = CY + 16;
+        var primaryText = Math.round(primaryRemaining) + '%';
+        var secondaryText = Math.round(secondaryRemaining) + '%';
+
+        ctx.save();
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+
+        ctx.fillStyle = 'rgba(0,0,0,0.62)';
+        roundedRect(CX - 38, CY - 25, 76, 50, 10);
+        ctx.fill();
+
+        ctx.font = '10px -apple-system, BlinkMacSystemFont, sans-serif';
+        ctx.fillStyle = 'rgba(255,255,255,0.72)';
+        ctx.fillText('Codex', CX, CY - 18);
+
+        ctx.font = 'bold 18px -apple-system, BlinkMacSystemFont, sans-serif';
+        ctx.fillStyle = 'rgba(255,255,255,0.96)';
+        ctx.fillText(primaryText, CX - 18, labelY);
+
+        ctx.font = '12px -apple-system, BlinkMacSystemFont, sans-serif';
+        ctx.fillStyle = 'rgba(255,255,255,0.68)';
+        ctx.fillText('/', CX, labelY);
+
+        ctx.font = 'bold 18px -apple-system, BlinkMacSystemFont, sans-serif';
+        ctx.fillStyle = 'rgba(255,255,255,0.96)';
+        ctx.fillText(secondaryText, CX + 20, labelY);
+
+        ctx.font = '10px -apple-system, BlinkMacSystemFont, sans-serif';
+        ctx.fillStyle = 'rgba(255,255,255,0.72)';
+        ctx.fillText('5h / Weekly', CX, valueY);
+        ctx.restore();
+      }
+
       function draw() {
         clear();
         if (!isVisible) return;
@@ -220,6 +256,7 @@
         if (usageData.secondary) drawRing(INNER_R, INNER_LW, sRem, 'secondary', calcUrgency(sRem));
         drawTickMarks();
         drawOrbitingGlint();
+        drawUsageNumbers(pRem, sRem);
 
         if (isHovering) {
           drawTooltip(usageData.primary, 42);

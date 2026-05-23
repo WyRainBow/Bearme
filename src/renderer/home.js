@@ -358,7 +358,7 @@ function updateCodexUsage(data) {
   }
 
   codexSource.textContent = data.source === 'live' ? '实时数据' : '本地日志';
-  codexPlan.textContent = data.planType || 'Codex';
+  codexPlan.textContent = data.planType ? String(data.planType).toUpperCase() : 'CODEX';
   updateMeter(data.primary, codexPrimaryValue, codexPrimaryBar, codexPrimaryReset);
   updateMeter(data.secondary, codexSecondaryValue, codexSecondaryBar, codexSecondaryReset);
 }

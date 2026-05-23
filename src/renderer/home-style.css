@@ -144,7 +144,7 @@
 /* 每日任务卡片 */
 .daily-tasks-card {
   grid-column: 2;
-  grid-row: 1;
+  grid-row: 2;
 }
 
 .tasks-list {
@@ -211,7 +211,7 @@
 /* Codex 额度卡片 */
 .codex-usage-card {
   grid-column: 2;
-  grid-row: 2;
+  grid-row: 1;
 }
 
 .codex-usage-card .card-header {
@@ -783,17 +783,17 @@ body.dark-mode a.about-link {
   
   .daily-tasks-card {
     grid-column: 1;
-    grid-row: 2;
+    grid-row: 3;
   }
-  
+
   .interaction-card {
     grid-column: 1;
-    grid-row: 3;
+    grid-row: 4;
   }
 
   .codex-usage-card {
     grid-column: 1;
-    grid-row: 4;
+    grid-row: 2;
   }
   
   .pet-skins {
