@@ -22,7 +22,7 @@
 }
 
 /* 卡片公共样式 */
-.status-card, .daily-tasks-card, .interaction-card, .mood-log-card {
+.status-card, .daily-tasks-card, .interaction-card {
   background-color: white;
   border-radius: 12px;
   border: 1px solid var(--card-border);
@@ -31,7 +31,7 @@
   transition: all 0.3s ease;
 }
 
-.status-card:hover, .daily-tasks-card:hover, .interaction-card:hover, .mood-log-card:hover {
+.status-card:hover, .daily-tasks-card:hover, .interaction-card:hover {
   box-shadow: var(--card-shadow);
   transform: translateY(-3px);
 }
@@ -258,44 +258,6 @@
   color: var(--text-color);
 }
 
-/* 日志卡片 */
-.mood-log-card {
-  grid-column: 1 / span 2;
-  grid-row: 3;
-}
-
-.log-list {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  max-height: 200px;
-  overflow-y: auto;
-}
-
-.log-item {
-  display: flex;
-  padding: 10px;
-  border-radius: 8px;
-  background-color: #f9f9f9;
-  transition: all 0.2s;
-}
-
-.log-item:hover {
-  background-color: rgba(255, 122, 122, 0.05);
-}
-
-.log-time {
-  min-width: 60px;
-  font-size: 12px;
-  color: var(--text-color-light);
-  font-weight: 500;
-}
-
-.log-message {
-  flex: 1;
-  font-size: 14px;
-  color: var(--text-color);
-}
 
 /* 宠物卡片容器 */
 .pet-cards-container {
@@ -488,6 +450,11 @@
   background-color: white;
 }
 
+.skin-item.dragging {
+  opacity: 0.4;
+  border-style: dashed;
+}
+
 .skin-item img {
   width: 70px;
   height: 70px;
@@ -658,7 +625,6 @@ input[type="range"] {
 body.dark-mode .status-card,
 body.dark-mode .daily-tasks-card,
 body.dark-mode .interaction-card,
-body.dark-mode .mood-log-card,
 body.dark-mode .pet-card,
 body.dark-mode .about-card,
 body.dark-mode .settings-section {
@@ -666,14 +632,10 @@ body.dark-mode .settings-section {
   border-color: var(--card-border);
 }
 
-body.dark-mode .task-item:hover,
-body.dark-mode .log-item {
+body.dark-mode .task-item:hover {
   background-color: #2a2a2a;
 }
 
-body.dark-mode .log-item:hover {
-  background-color: rgba(255, 122, 122, 0.1);
-}
 
 body.dark-mode .interaction-btn,
 body.dark-mode .add-pet-card {
@@ -717,11 +679,6 @@ body.dark-mode a.about-link {
   .interaction-card {
     grid-column: 1;
     grid-row: 3;
-  }
-  
-  .mood-log-card {
-    grid-column: 1;
-    grid-row: 4;
   }
   
   .pet-skins {

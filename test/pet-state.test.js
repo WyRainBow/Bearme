@@ -7,7 +7,7 @@ const {
 
 assert.strictEqual(normalizePetAction('jump'), 'jump');
 assert.strictEqual(normalizePetAction('missing'), 'default');
-assert.strictEqual(ACTION_SKIN_MAP.default, '默认');
+assert.strictEqual(ACTION_SKIN_MAP.default, '奔跑');
 assert.strictEqual(ACTION_SKIN_MAP.sleep, '睡醒');
 assert.strictEqual(ACTION_ANIMATION_MAP.jump, 'bounce');
 assert.strictEqual(ACTION_ANIMATION_MAP.play, 'shake');

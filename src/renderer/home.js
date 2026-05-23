@@ -198,7 +198,7 @@ function saveSettings() {
     notification: notificationCheckbox ? notificationCheckbox.checked : true,
     sound: soundCheckbox ? soundCheckbox.checked : true,
     volume: volumeSlider ? parseInt(volumeSlider.value) : 50,
-    skin: document.querySelector('.skin-item.selected') ? document.querySelector('.skin-item.selected').dataset.skin : '默认',
+    skin: document.querySelector('.skin-item.selected') ? document.querySelector('.skin-item.selected').dataset.skin : '奔跑',
     customSkinPath: document.querySelector('.skin-item.selected')?.dataset.skin === '自定义' ? customSkinPath : null
   };
   
@@ -284,59 +284,7 @@ ipcRenderer.on('pet-action-updated', (event, state) => {
 
 // 处理宠物互动
 function handleInteraction(action) {
-  // 发送互动行为到主进程
   ipcRenderer.send('pet-interaction', action);
-  
-  // 添加一条互动日志
-  addInteractionLog(action);
-}
-
-// 添加互动日志
-function addInteractionLog(action) {
-  const logList = document.querySelector('.log-list');
-  if (!logList) return;
-  
-  // 获取当前时间
-  const now = new Date();
-  const timeStr = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
-  
-  // 根据动作生成日志消息
-  let message = '';
-  switch(action) {
-    case 'feed':
-      message = '宠物正在享用美食，看起来很满足';
-      break;
-    case 'play':
-      message = '宠物和你一起玩耍，非常开心';
-      break;
-    case 'pet':
-      message = '宠物被你抚摸，感到很舒服';
-      break;
-    case 'sleep':
-      message = '宠物进入了睡眠状态，正在休息';
-      break;
-    default:
-      message = '你与宠物进行了互动';
-  }
-  
-  // 创建日志项
-  const logItem = document.createElement('div');
-  logItem.className = 'log-item';
-  logItem.innerHTML = `
-    <div class="log-time">${timeStr}</div>
-    <div class="log-message">${message}</div>
-  `;
-  
-  // 添加到日志列表顶部
-  logList.insertBefore(logItem, logList.firstChild);
-  
-  // 如果日志项超过20个，移除最旧的
-  if (logList.children.length > 20) {
-    logList.removeChild(logList.lastChild);
-  }
-  
-  // 给新日志添加动画效果
-  logItem.style.animation = 'fadeIn 0.5s';
 }
 
 // 绑定互动按钮事件
@@ -389,6 +337,42 @@ if (resetBtn) {
     ipcRenderer.send('reset-settings');
   });
 }
+
+// 皮肤拖拽排序
+(function initSkinDragSort() {
+  const container = document.querySelector('.pet-skins');
+  if (!container) return;
+
+  let dragItem = null;
+
+  container.addEventListener('dragstart', (e) => {
+    const item = e.target.closest('.skin-item');
+    if (!item || item.classList.contains('custom-skin-item')) { e.preventDefault(); return; }
+    dragItem = item;
+    item.classList.add('dragging');
+    e.dataTransfer.effectAllowed = 'move';
+  });
+
+  container.addEventListener('dragend', () => {
+    if (dragItem) dragItem.classList.remove('dragging');
+    dragItem = null;
+  });
+
+  container.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    const target = e.target.closest('.skin-item');
+    if (!target || target === dragItem || target.classList.contains('custom-skin-item')) return;
+
+    const rect = target.getBoundingClientRect();
+    const midX = rect.left + rect.width / 2;
+    if (e.clientX < midX) {
+      container.insertBefore(dragItem, target);
+    } else {
+      container.insertBefore(dragItem, target.nextSibling);
+    }
+  });
+})();
 
 // 绑定皮肤选择事件
 skinItems.forEach(item => {

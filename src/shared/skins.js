@@ -1,9 +1,8 @@
 const path = require('path');
 
-const DEFAULT_SKIN = '默认';
+const DEFAULT_SKIN = '奔跑';
 
 const PRESET_SKINS = {
-  默认: 'assets/pet.png',
   奔跑: 'assets/自嘲熊run.gif',
   工作: 'assets/自嘲熊work.gif',
   睡醒: 'assets/自嘲熊睡醒.gif',
@@ -12,7 +11,10 @@ const PRESET_SKINS = {
 };
 
 function normalizeSkinSettings(settings = {}) {
-  const skin = settings.skin || DEFAULT_SKIN;
+  let skin = settings.skin || DEFAULT_SKIN;
+  if (skin === '默认') {
+    skin = DEFAULT_SKIN;
+  }
 
   if (skin === '自定义' && settings.customSkinPath) {
     return { skin, customSkinPath: settings.customSkinPath };

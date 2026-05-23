@@ -1,5 +1,5 @@
 const ACTION_SKIN_MAP = {
-  default: '默认',
+  default: '奔跑',
   jump: '奔跑',
   sleep: '睡醒',
   play: '奔跑',

@@ -10,13 +10,13 @@ const {
 
 const projectRoot = path.resolve(__dirname, '..');
 
-assert.strictEqual(DEFAULT_SKIN, '默认');
-assert.deepStrictEqual(Object.keys(PRESET_SKINS), ['默认', '奔跑', '工作', '睡醒']);
+assert.strictEqual(DEFAULT_SKIN, '奔跑');
+assert.deepStrictEqual(Object.keys(PRESET_SKINS), ['奔跑', '工作', '睡醒', '贴纸', '海里']);
 
 for (const skinName of Object.keys(PRESET_SKINS)) {
   const imagePath = getSkinImagePath({ skin: skinName }, projectRoot);
   assert.ok(imagePath.startsWith(projectRoot), `${skinName} should resolve inside project`);
-  assert.ok(/\.(png|gif)$/.test(imagePath), `${skinName} should resolve to an image`);
+  assert.ok(/\.(png|gif|jpg|jpeg)$/.test(imagePath), `${skinName} should resolve to an image`);
 }
 
 const customPath = path.join(projectRoot, 'assets', 'pet.gif');

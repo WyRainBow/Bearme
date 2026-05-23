@@ -245,6 +245,42 @@ resetBtn.addEventListener('click', () => {
   }
 });
 
+// 皮肤拖拽排序
+(function initSkinDragSort() {
+  const container = document.querySelector('.pet-skins');
+  if (!container) return;
+
+  let dragItem = null;
+
+  container.addEventListener('dragstart', (e) => {
+    const item = e.target.closest('.skin-item');
+    if (!item || item.classList.contains('custom-skin-item')) { e.preventDefault(); return; }
+    dragItem = item;
+    item.classList.add('dragging');
+    e.dataTransfer.effectAllowed = 'move';
+  });
+
+  container.addEventListener('dragend', () => {
+    if (dragItem) dragItem.classList.remove('dragging');
+    dragItem = null;
+  });
+
+  container.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    const target = e.target.closest('.skin-item');
+    if (!target || target === dragItem || target.classList.contains('custom-skin-item')) return;
+
+    const rect = target.getBoundingClientRect();
+    const midX = rect.left + rect.width / 2;
+    if (e.clientX < midX) {
+      container.insertBefore(dragItem, target);
+    } else {
+      container.insertBefore(dragItem, target.nextSibling);
+    }
+  });
+})();
+
 // 皮肤选择
 skinItems.forEach(item => {
   item.addEventListener('click', async () => {
