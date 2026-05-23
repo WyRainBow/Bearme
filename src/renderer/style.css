@@ -114,6 +114,11 @@ html, body {
   color: white;
 }
 
+.open-home {
+  background: linear-gradient(135deg, #ff7043, #ff5722);
+  color: white;
+}
+
 .icon {
   font-size: 12px;
   line-height: 1;

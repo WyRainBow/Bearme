@@ -58,13 +58,16 @@ function initPet() {
   // 获取所有互动按钮
   const interactButton = document.querySelector('.circular-button.interact');
   const dailyQuoteButton = document.querySelector('.circular-button.daily-quote');
+  const openHomeButton = document.querySelector('.circular-button.open-home');
 
-  // 直接添加事件监听器，确保点击
   interactButton.addEventListener('click', handleInteract);
   dailyQuoteButton.addEventListener('click', handleDailyQuote);
+  openHomeButton.addEventListener('click', () => {
+    ipcRenderer.send('navigate-to', 'home');
+    interactionButtons.classList.add('hidden');
+  });
 
-  // 为互动按钮添加阻止冒泡
-  [interactButton, dailyQuoteButton].forEach(button => {
+  [interactButton, dailyQuoteButton, openHomeButton].forEach(button => {
     button.addEventListener('click', (e) => {
       e.stopPropagation(); // 阻止事件冒泡
     });
