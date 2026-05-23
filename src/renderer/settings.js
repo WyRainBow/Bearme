@@ -1,5 +1,6 @@
 // 获取Electron的ipcRenderer
 const { ipcRenderer } = require('electron');
+const { pathToFileURL } = require('url');
 
 // DOM元素
 const closeBtn = document.getElementById('close-btn');
@@ -11,11 +12,12 @@ const clickThrough = document.getElementById('click-through');
 const notification = document.getElementById('notification');
 const sound = document.getElementById('sound');
 const volume = document.getElementById('volume');
-const skinItems = document.querySelectorAll('.skin-item:not(.locked)');
+const skinItems = document.querySelectorAll('.skin-item');
 const header = document.querySelector('.header');
 
 // 当前设置
 let currentSettings = {};
+let customSkinPath = null;
 
 // 窗口拖动功能
 let isDragging = false;
@@ -66,6 +68,8 @@ document.addEventListener('mouseup', () => {
 function setupSkinHoverEffect() {
   skinItems.forEach(item => {
     const img = item.querySelector('img');
+    if (!img) return;
+
     const originalSrc = img.src;
     let isGif = originalSrc.endsWith('.gif');
     
@@ -149,12 +153,15 @@ function updateUIFromSettings(settings) {
   // 皮肤选择
   if (settings.skin) {
     skinItems.forEach(item => {
-      const skinName = item.querySelector('span').textContent;
+      const skinName = item.dataset.skin || item.querySelector('span').textContent;
       if (skinName === settings.skin) {
         selectSkin(item);
       }
     });
   }
+
+  customSkinPath = settings.customSkinPath || null;
+  updateCustomSkinPreview(customSkinPath);
 }
 
 // 从UI获取当前设置
@@ -166,10 +173,25 @@ function getSettingsFromUI() {
     notification: notification.checked,
     sound: sound.checked,
     volume: parseInt(volume.value),
-    skin: document.querySelector('.skin-item.selected span').textContent
+    skin: document.querySelector('.skin-item.selected').dataset.skin,
+    customSkinPath: document.querySelector('.skin-item.selected').dataset.skin === '自定义' ? customSkinPath : null
   };
   
   return settings;
+}
+
+function updateCustomSkinPreview(imagePath) {
+  const customItem = document.querySelector('.custom-skin-item');
+  if (!customItem) return;
+
+  const preview = customItem.querySelector('.custom-skin-preview');
+  if (!preview) return;
+
+  if (imagePath) {
+    preview.innerHTML = `<img src="${pathToFileURL(imagePath).href}" alt="自定义皮肤">`;
+  } else {
+    preview.textContent = '+';
+  }
 }
 
 // 选择皮肤
@@ -225,8 +247,17 @@ resetBtn.addEventListener('click', () => {
 
 // 皮肤选择
 skinItems.forEach(item => {
-  item.addEventListener('click', () => {
+  item.addEventListener('click', async () => {
+    if (item.dataset.skin === '自定义') {
+      const customSkin = await ipcRenderer.invoke('select-custom-skin');
+      if (!customSkin) return;
+      customSkinPath = customSkin.customSkinPath;
+      updateCustomSkinPreview(customSkinPath);
+    }
+
     selectSkin(item);
+    const newSettings = getSettingsFromUI();
+    ipcRenderer.send('save-settings', newSettings);
   });
 });
 

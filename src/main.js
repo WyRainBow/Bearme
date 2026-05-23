@@ -1,6 +1,7 @@
-const { app, BrowserWindow, ipcMain, screen, Tray, Menu, globalShortcut, nativeImage } = require('electron');
+const { app, BrowserWindow, ipcMain, screen, Tray, Menu, globalShortcut, nativeImage, dialog } = require('electron');
 const path = require('path');
 const fs = require('fs');
+const { DEFAULT_SKIN, normalizeSkinSettings } = require('./shared/skins');
 
 // 保持对窗口对象的全局引用，避免JavaScript对象被垃圾回收时窗口关闭
 let mainWindow;
@@ -43,7 +44,8 @@ function loadSettings() {
     sound: true,
     volume: 50,
     theme: 'light',
-    skin: '默认',
+    skin: DEFAULT_SKIN,
+    customSkinPath: null,
     position: { x: null, y: null }
   };
 }
@@ -565,6 +567,7 @@ ipcMain.on('get-settings', (event) => {
 // 监听保存设置请求
 ipcMain.on('save-settings', (event, newSettings) => {
   userSettings = { ...userSettings, ...newSettings };
+  userSettings = { ...userSettings, ...normalizeSkinSettings(userSettings) };
   saveSettings();
   event.reply('settings', userSettings);
 });
@@ -579,11 +582,39 @@ ipcMain.on('reset-settings', (event) => {
     sound: true,
     volume: 50,
     theme: 'light',
-    skin: '默认',
+    skin: DEFAULT_SKIN,
+    customSkinPath: null,
     position: { x: null, y: null }
   };
   saveSettings();
   event.reply('settings', userSettings);
+});
+
+ipcMain.handle('select-custom-skin', async () => {
+  const result = await dialog.showOpenDialog({
+    title: '选择自定义宠物外观',
+    properties: ['openFile'],
+    filters: [
+      { name: '图片文件', extensions: ['png', 'jpg', 'jpeg', 'gif', 'webp'] }
+    ]
+  });
+
+  if (result.canceled || result.filePaths.length === 0) {
+    return null;
+  }
+
+  const customSkinPath = result.filePaths[0];
+  userSettings = {
+    ...userSettings,
+    skin: '自定义',
+    customSkinPath
+  };
+  saveSettings();
+
+  return {
+    skin: userSettings.skin,
+    customSkinPath
+  };
 });
 
 // 监听关闭设置窗口请求

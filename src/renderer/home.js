@@ -1,5 +1,6 @@
 // 引入electron模块
 const { ipcRenderer } = require('electron');
+const { pathToFileURL } = require('url');
 
 // 窗口控制按钮
 const minimizeBtn = document.getElementById('minimize-btn');
@@ -34,7 +35,8 @@ const soundCheckbox = document.getElementById('sound');
 const volumeSlider = document.getElementById('volume');
 const resetBtn = document.getElementById('reset-btn');
 const saveBtn = document.getElementById('save-btn');
-const skinItems = document.querySelectorAll('.skin-item:not(.locked)');
+const skinItems = document.querySelectorAll('.skin-item');
+let customSkinPath = null;
 
 // 窗口控制功能
 if (minimizeBtn) {
@@ -182,12 +184,15 @@ function updateSettingsUI(settings) {
   if (skinItems.length > 0) {
     skinItems.forEach(item => {
       item.classList.remove('selected');
-      const skinName = item.querySelector('span').textContent;
+      const skinName = item.dataset.skin || item.querySelector('span').textContent;
       if (skinName === settings.skin) {
         item.classList.add('selected');
       }
     });
   }
+
+  customSkinPath = settings.customSkinPath || null;
+  updateCustomSkinPreview(customSkinPath);
 }
 
 // 保存设置
@@ -199,13 +204,28 @@ function saveSettings() {
     notification: notificationCheckbox ? notificationCheckbox.checked : true,
     sound: soundCheckbox ? soundCheckbox.checked : true,
     volume: volumeSlider ? parseInt(volumeSlider.value) : 50,
-    skin: document.querySelector('.skin-item.selected span') ? document.querySelector('.skin-item.selected span').textContent : '默认'
+    skin: document.querySelector('.skin-item.selected') ? document.querySelector('.skin-item.selected').dataset.skin : '默认',
+    customSkinPath: document.querySelector('.skin-item.selected')?.dataset.skin === '自定义' ? customSkinPath : null
   };
   
   ipcRenderer.send('save-settings', newSettings);
   
   // 显示保存成功提示
   showSavedNotice();
+}
+
+function updateCustomSkinPreview(imagePath) {
+  const customItem = document.querySelector('.custom-skin-item');
+  if (!customItem) return;
+
+  let preview = customItem.querySelector('.custom-skin-preview');
+  if (!preview) return;
+
+  if (imagePath) {
+    preview.innerHTML = `<img src="${pathToFileURL(imagePath).href}" alt="自定义皮肤">`;
+  } else {
+    preview.textContent = '+';
+  }
 }
 
 // 显示保存成功提示
@@ -349,11 +369,19 @@ if (resetBtn) {
 
 // 绑定皮肤选择事件
 skinItems.forEach(item => {
-  item.addEventListener('click', () => {
+  item.addEventListener('click', async () => {
+    if (item.dataset.skin === '自定义') {
+      const customSkin = await ipcRenderer.invoke('select-custom-skin');
+      if (!customSkin) return;
+      customSkinPath = customSkin.customSkinPath;
+      updateCustomSkinPreview(customSkinPath);
+    }
+
     // 移除之前的选中状态
     skinItems.forEach(i => i.classList.remove('selected'));
     // 设置当前项为选中状态
     item.classList.add('selected');
+    saveSettings();
   });
 });
 

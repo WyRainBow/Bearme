@@ -1,4 +1,6 @@
 const { ipcRenderer, contextBridge, remote } = require('electron');
+const { pathToFileURL } = require('url');
+const { getSkinImagePath } = require('../shared/skins');
 
 // 获取DOM元素
 const pet = document.getElementById('pet');
@@ -83,6 +85,7 @@ function initPet() {
   
   // 初始化经验条
   updateLevelUI();
+  ipcRenderer.send('get-settings');
   
   // 获取所有互动按钮
   const signInButton = document.querySelector('.circular-button.sign-in');
@@ -112,6 +115,11 @@ function initPet() {
   }
   
   console.log("初始化完成");
+}
+
+function applySkin(settings) {
+  const imagePath = getSkinImagePath(settings);
+  pet.style.backgroundImage = `url("${pathToFileURL(imagePath).href}")`;
 }
 
 // 更新等级UI
@@ -599,6 +607,14 @@ ipcRenderer.on('update-interaction', (event, ignoreMouseEvents) => {
   } else {
     console.log('点击穿透已禁用');
   }
+});
+
+ipcRenderer.on('settings', (event, settings) => {
+  applySkin(settings);
+});
+
+ipcRenderer.on('settings-updated', (event, settings) => {
+  applySkin(settings);
 });
 
 // 初始化宠物
