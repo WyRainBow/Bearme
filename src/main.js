@@ -17,8 +17,10 @@ let tray = null;
 // 用户设置
 let userSettings = {};
 let clickThroughEnabled = false;
-// 设置文件路径
-const settingsPath = path.join(app.getPath('userData'), 'settings.json');
+// 设置文件路径（延迟求值，避免 app 未就绪时报错）
+function getSettingsPath() {
+  return path.join(app.getPath('userData'), 'settings.json');
+}
 
 // 添加后面要用到的导入和窗口引用
 let modernSettingsWindow = null;
@@ -29,8 +31,8 @@ let homeWindow = null;
 // 从配置文件加载设置
 function loadSettings() {
   try {
-    if (fs.existsSync(settingsPath)) {
-      return JSON.parse(fs.readFileSync(settingsPath, 'utf8'));
+    if (fs.existsSync(getSettingsPath())) {
+      return JSON.parse(fs.readFileSync(getSettingsPath(), 'utf8'));
     }
   } catch (error) {
     console.error('加载设置时出错:', error);
@@ -56,7 +58,7 @@ function loadSettings() {
 // 保存用户设置
 function saveSettings() {
   try {
-    fs.writeFileSync(settingsPath, JSON.stringify(userSettings, null, 2), 'utf8');
+    fs.writeFileSync(getSettingsPath(), JSON.stringify(userSettings, null, 2), 'utf8');
     // 应用设置到应用程序
     applySettings();
   } catch (error) {
