@@ -13,7 +13,10 @@
     <!-- 左侧导航栏 -->
     <div class="sidebar">
       <div class="avatar-container">
-        <img src="../../assets/pet.png" alt="头像">
+        <img id="avatar-image" src="../../assets/pet.png" alt="头像">
+        <button id="avatar-upload-btn" class="avatar-upload-btn" type="button" title="更换头像">
+          <i class="fas fa-camera"></i>
+        </button>
       </div>
       <div class="sidebar-menu">
         <div class="menu-item active">
@@ -67,7 +70,7 @@
         <!-- 宠物卡片 -->
         <div class="pet-card">
           <div class="pet-image-container">
-            <img src="../../assets/自嘲熊run.gif" class="pet-image" alt="自嘲熊">
+            <img id="managed-pet-image" src="../../assets/pet.png" class="pet-image" alt="自嘲熊">
           </div>
           <div class="pet-name">自嘲熊</div>
           <select class="pet-action-select">

@@ -1,6 +1,7 @@
 // 引入electron模块
 const { ipcRenderer } = require('electron');
 const { pathToFileURL } = require('url');
+const { getSkinImagePath } = require('../shared/skins');
 
 // 窗口控制按钮
 const minimizeBtn = document.getElementById('minimize-btn');
@@ -33,6 +34,11 @@ const volumeSlider = document.getElementById('volume');
 const resetBtn = document.getElementById('reset-btn');
 const saveBtn = document.getElementById('save-btn');
 const skinItems = document.querySelectorAll('.skin-item');
+const avatarImage = document.getElementById('avatar-image');
+const avatarUploadBtn = document.getElementById('avatar-upload-btn');
+const petActionSelect = document.querySelector('.pet-action-select');
+const managedPetImage = document.getElementById('managed-pet-image');
+const statusPetImage = document.getElementById('status-pet-image');
 let customSkinPath = null;
 
 // 窗口控制功能
@@ -175,6 +181,12 @@ function updateSettingsUI(settings) {
 
   customSkinPath = settings.customSkinPath || null;
   updateCustomSkinPreview(customSkinPath);
+  updateAvatarPreview(settings.avatarPath || null);
+  updatePetImages(settings);
+
+  if (petActionSelect && settings.currentAction) {
+    petActionSelect.value = settings.currentAction;
+  }
 }
 
 // 保存设置
@@ -210,6 +222,27 @@ function updateCustomSkinPreview(imagePath) {
   }
 }
 
+function toImageUrl(imagePath) {
+  return pathToFileURL(imagePath).href;
+}
+
+function updateAvatarPreview(imagePath) {
+  if (!avatarImage) return;
+  avatarImage.src = imagePath ? toImageUrl(imagePath) : '../../assets/pet.png';
+}
+
+function updatePetImages(settings) {
+  const imageUrl = toImageUrl(getSkinImagePath(settings));
+
+  if (statusPetImage) {
+    statusPetImage.src = imageUrl;
+  }
+
+  if (managedPetImage) {
+    managedPetImage.src = imageUrl;
+  }
+}
+
 // 显示保存成功提示
 function showSavedNotice() {
   const notice = document.createElement('div');
@@ -239,6 +272,14 @@ ipcRenderer.on('pet-status', (event, status) => {
 // 监听主进程返回的设置
 ipcRenderer.on('settings', (event, settings) => {
   updateSettingsUI(settings);
+});
+
+ipcRenderer.on('settings-updated', (event, settings) => {
+  updateSettingsUI(settings);
+});
+
+ipcRenderer.on('pet-action-updated', (event, state) => {
+  updatePetImages(state);
 });
 
 // 处理宠物互动
@@ -367,6 +408,26 @@ skinItems.forEach(item => {
   });
 });
 
+if (avatarUploadBtn) {
+  avatarUploadBtn.addEventListener('click', async (event) => {
+    event.stopPropagation();
+    const avatar = await ipcRenderer.invoke('select-custom-avatar');
+    if (!avatar) return;
+    updateAvatarPreview(avatar.avatarPath);
+  });
+}
+
+if (petActionSelect) {
+  petActionSelect.addEventListener('change', (event) => {
+    const petCard = event.target.closest('.pet-card');
+    const petName = petCard?.querySelector('.pet-name')?.textContent || '自嘲熊';
+    ipcRenderer.send('pet-action', {
+      name: petName,
+      action: event.target.value
+    });
+  });
+}
+
 // 侧边栏菜单项点击事件
 const menuItems = document.querySelectorAll('.menu-item');
 menuItems.forEach(item => {
@@ -433,7 +494,8 @@ document.addEventListener('mousedown', (e) => {
       !e.target.closest('.task-item') &&
       !e.target.closest('.log-item') &&
       !e.target.closest('.refresh-btn') &&
-      !e.target.closest('.skin-item')) {
+      !e.target.closest('.skin-item') &&
+      !e.target.closest('.avatar-container')) {
     // 通知主进程允许拖动
     ipcRenderer.send('allow-window-drag');
   }
@@ -454,7 +516,8 @@ ipcRenderer.on('theme-preference', (event, darkMode) => {
 document.addEventListener('DOMContentLoaded', () => {
   // 加载宠物状态
   loadPetStatus();
-  
+  loadSettings();
+
   // 加载主题偏好
   ipcRenderer.send('get-theme-preference');
   

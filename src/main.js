@@ -2,6 +2,7 @@ const { app, BrowserWindow, ipcMain, screen, Tray, Menu, globalShortcut, nativeI
 const path = require('path');
 const fs = require('fs');
 const { DEFAULT_SKIN, normalizeSkinSettings } = require('./shared/skins');
+const { ACTION_SKIN_MAP, ACTION_ANIMATION_MAP, normalizePetAction } = require('./shared/pet-state');
 
 // 保持对窗口对象的全局引用，避免JavaScript对象被垃圾回收时窗口关闭
 let mainWindow;
@@ -46,6 +47,8 @@ function loadSettings() {
     theme: 'light',
     skin: DEFAULT_SKIN,
     customSkinPath: null,
+    avatarPath: null,
+    currentAction: 'default',
     position: { x: null, y: null }
   };
 }
@@ -584,6 +587,8 @@ ipcMain.on('reset-settings', (event) => {
     theme: 'light',
     skin: DEFAULT_SKIN,
     customSkinPath: null,
+    avatarPath: null,
+    currentAction: 'default',
     position: { x: null, y: null }
   };
   saveSettings();
@@ -614,6 +619,30 @@ ipcMain.handle('select-custom-skin', async () => {
   return {
     skin: userSettings.skin,
     customSkinPath
+  };
+});
+
+ipcMain.handle('select-custom-avatar', async () => {
+  const result = await dialog.showOpenDialog({
+    title: '选择自定义头像',
+    properties: ['openFile'],
+    filters: [
+      { name: '图片文件', extensions: ['png', 'jpg', 'jpeg', 'gif', 'webp'] }
+    ]
+  });
+
+  if (result.canceled || result.filePaths.length === 0) {
+    return null;
+  }
+
+  userSettings = {
+    ...userSettings,
+    avatarPath: result.filePaths[0]
+  };
+  saveSettings();
+
+  return {
+    avatarPath: userSettings.avatarPath
   };
 });
 
@@ -722,16 +751,36 @@ ipcMain.on('get-pet-list', (event) => {
       id: 1,
       name: '自嘲熊',
       mood: 'happy',
-      skin: '默认'
+      skin: userSettings.skin || DEFAULT_SKIN,
+      customSkinPath: userSettings.customSkinPath || null,
+      action: userSettings.currentAction || 'default'
     }
   ];
   event.reply('pet-list', pets);
 });
 
 ipcMain.on('pet-action', (event, data) => {
-  // 处理宠物动作
-  console.log(`宠物 ${data.name} 执行动作: ${data.action}`);
-  // 在这里添加代码处理宠物动作
+  const action = normalizePetAction(data.action);
+  const skin = ACTION_SKIN_MAP[action];
+  const animation = ACTION_ANIMATION_MAP[action];
+
+  userSettings = {
+    ...userSettings,
+    currentAction: action,
+    skin,
+    customSkinPath: null
+  };
+  saveSettings();
+
+  if (mainWindow && animation) {
+    mainWindow.webContents.send('play-animation', animation);
+  }
+
+  event.reply('pet-action-updated', {
+    action,
+    skin,
+    customSkinPath: null
+  });
 });
 
 ipcMain.on('remove-pet', (event, petName) => {

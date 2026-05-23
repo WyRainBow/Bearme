@@ -1,5 +1,7 @@
 // 引入electron模块
 const { ipcRenderer } = require('electron');
+const { pathToFileURL } = require('url');
+const { getSkinImagePath } = require('../shared/skins');
 
 // 窗口控制按钮
 const minimizeBtn = document.getElementById('minimize-btn');
@@ -14,6 +16,9 @@ const petActionSelects = document.querySelectorAll('.pet-action-select');
 const deleteBtns = document.querySelectorAll('.delete-btn');
 const addPetCard = document.querySelector('.add-pet-card');
 const searchInput = document.querySelector('.search-input');
+const avatarImage = document.getElementById('avatar-image');
+const avatarUploadBtn = document.getElementById('avatar-upload-btn');
+const managedPetImage = document.getElementById('managed-pet-image');
 
 // 窗口控制功能
 if (minimizeBtn) {
@@ -58,9 +63,38 @@ function loadPets() {
 
 // 监听主进程返回的宠物列表
 ipcRenderer.on('pet-list', (event, pets) => {
-  // 在实际应用中这里应该渲染宠物列表
-  console.log('宠物列表:', pets);
+  const pet = pets && pets[0];
+  if (!pet) return;
+
+  updatePetImage(pet);
+  petActionSelects.forEach(select => {
+    select.value = pet.action || 'default';
+  });
 });
+
+ipcRenderer.on('settings', (event, settings) => {
+  updateAvatarPreview(settings.avatarPath || null);
+  updatePetImage(settings);
+});
+
+ipcRenderer.on('settings-updated', (event, settings) => {
+  updateAvatarPreview(settings.avatarPath || null);
+  updatePetImage(settings);
+});
+
+ipcRenderer.on('pet-action-updated', (event, state) => {
+  updatePetImage(state);
+});
+
+function updateAvatarPreview(imagePath) {
+  if (!avatarImage) return;
+  avatarImage.src = imagePath ? pathToFileURL(imagePath).href : '../../assets/pet.png';
+}
+
+function updatePetImage(settings) {
+  if (!managedPetImage) return;
+  managedPetImage.src = pathToFileURL(getSkinImagePath(settings)).href;
+}
 
 // 处理宠物动作选择
 petActionSelects.forEach(select => {
@@ -95,6 +129,15 @@ if (addPetCard) {
   addPetCard.addEventListener('click', () => {
     // 打开添加宠物对话框
     ipcRenderer.send('open-add-pet-dialog');
+  });
+}
+
+if (avatarUploadBtn) {
+  avatarUploadBtn.addEventListener('click', async (event) => {
+    event.stopPropagation();
+    const avatar = await ipcRenderer.invoke('select-custom-avatar');
+    if (!avatar) return;
+    updateAvatarPreview(avatar.avatarPath);
   });
 }
 
@@ -147,7 +190,8 @@ menuItems.forEach(item => {
 document.addEventListener('DOMContentLoaded', () => {
   // 加载宠物数据
   loadPets();
-  
+  ipcRenderer.send('get-settings');
+
   // 加载主题偏好
   ipcRenderer.send('get-theme-preference');
 });
@@ -170,8 +214,9 @@ document.addEventListener('mousedown', (e) => {
       !e.target.closest('select') && 
       !e.target.closest('input') &&
       !e.target.closest('.pet-card') &&
-      !e.target.closest('.add-pet-card')) {
+      !e.target.closest('.add-pet-card') &&
+      !e.target.closest('.avatar-container')) {
     // 通知主进程允许拖动
     ipcRenderer.send('allow-window-drag');
   }
-}); 
+});
