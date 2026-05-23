@@ -21,9 +21,6 @@ const refreshBtn = document.querySelector('.refresh-btn');
 
 // 宠物状态元素
 const petName = document.getElementById('pet-name');
-const petLevel = document.getElementById('pet-level');
-const expValue = document.getElementById('exp-value');
-const expProgress = document.querySelector('.exp-progress');
 const moodIndicator = document.querySelector('.mood-indicator');
 
 // 设置元素
@@ -102,21 +99,6 @@ function updatePetStatus(status) {
   // 更新宠物名称
   if (petName) {
     petName.textContent = status.name || '自嘲熊';
-  }
-  
-  // 更新宠物等级
-  if (petLevel) {
-    petLevel.textContent = status.level || 1;
-  }
-  
-  // 更新经验值
-  if (expValue && expProgress) {
-    const current = status.exp || 0;
-    const max = status.maxExp || 100;
-    const percent = Math.min(100, Math.max(0, (current / max) * 100));
-    
-    expValue.textContent = `${current}/${max}`;
-    expProgress.style.width = `${percent}%`;
   }
   
   // 更新心情状态
@@ -434,14 +416,6 @@ taskItems.forEach(item => {
       if (item.classList.contains('completed')) {
         checkbox.innerHTML = '<i class="fas fa-check-circle"></i>';
         
-        // 获取任务奖励
-        const rewardText = item.querySelector('.task-reward').textContent;
-        const expMatch = rewardText.match(/\+(\d+)\s+经验/);
-        if (expMatch && expMatch[1]) {
-          const expGained = parseInt(expMatch[1]);
-          // 通知主进程任务完成，获得经验
-          ipcRenderer.send('task-completed', { exp: expGained });
-        }
       } else {
         checkbox.innerHTML = '<i class="far fa-circle"></i>';
       }

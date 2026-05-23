@@ -116,27 +116,6 @@
   color: var(--text-color);
 }
 
-/* 经验条 */
-.exp-bar {
-  width: 120px;
-  height: 8px;
-  background-color: #f0f0f0;
-  border-radius: 4px;
-  margin-right: 10px;
-  overflow: hidden;
-}
-
-.exp-progress {
-  height: 100%;
-  background-color: var(--primary-color);
-  border-radius: 4px;
-}
-
-#exp-value {
-  font-size: 12px;
-  color: var(--text-color-light);
-}
-
 /* 心情指示器 */
 .mood-indicator {
   padding: 5px 10px;
@@ -704,10 +683,6 @@ body.dark-mode .add-pet-card {
 body.dark-mode .btn-icon {
   background-color: #333;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-}
-
-body.dark-mode .exp-bar {
-  background-color: #444;
 }
 
 body.dark-mode .skin-item {

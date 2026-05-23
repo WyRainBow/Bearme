@@ -721,7 +721,6 @@ ipcMain.on('get-pet-list', (event) => {
     {
       id: 1,
       name: '自嘲熊',
-      level: 5,
       mood: 'happy',
       skin: '默认'
     }
@@ -794,9 +793,6 @@ ipcMain.on('get-pet-status', (event) => {
   // 模拟宠物数据，实际应用中应从数据库获取
   const status = {
     name: '自嘲熊',
-    level: 5,
-    exp: 75,
-    maxExp: 100,
     mood: 'happy'
   };
   
@@ -807,12 +803,6 @@ ipcMain.on('get-pet-status', (event) => {
 ipcMain.on('pet-interaction', (event, action) => {
   console.log(`宠物互动: ${action}`);
   // 实际应用中这里会更新宠物状态并持久化
-});
-
-// 任务完成处理
-ipcMain.on('task-completed', (event, data) => {
-  console.log(`任务完成，获得 ${data.exp} 经验值`);
-  // 实际应用中这里会更新宠物经验并持久化
 });
 
 // 应用即将退出时注销快捷键
