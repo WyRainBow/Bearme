@@ -270,14 +270,14 @@ function createHomeWindow() {
   const { width, height } = screen.getPrimaryDisplay().workAreaSize;
   
   // 设置窗口宽高
-  const windowWidth = 900;
-  const windowHeight = 600;
+  const windowWidth = 1180;
+  const windowHeight = 760;
   
   homeWindow = new BrowserWindow({
     width: windowWidth,
     height: windowHeight,
-    minWidth: 800,
-    minHeight: 500,
+    minWidth: 980,
+    minHeight: 640,
     frame: false, // 无边框
     backgroundColor: '#ffffff',
     webPreferences: {
