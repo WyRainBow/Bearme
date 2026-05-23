@@ -6,8 +6,14 @@ const PRESET_SKINS = {
   奔跑: 'assets/自嘲熊run.gif',
   工作: 'assets/自嘲熊work.gif',
   睡醒: 'assets/自嘲熊睡醒.gif',
-  贴纸: 'assets/自嘲熊sticker.gif',
-  海里: 'assets/自嘲熊海里.jpg'
+  贴纸: 'assets/zichao-bear-sticker.gif',
+  海里: 'assets/自嘲熊海里.jpg',
+  大厨: 'assets/bear-chef.png'
+};
+
+const SKIN_IDLE_ANIMATIONS = {
+  海里: 'ocean-float',
+  大厨: 'chef-present'
 };
 
 function normalizeSkinSettings(settings = {}) {
@@ -40,6 +46,7 @@ function getSkinImagePath(settings = {}, projectRoot = path.resolve(__dirname, '
 module.exports = {
   DEFAULT_SKIN,
   PRESET_SKINS,
+  SKIN_IDLE_ANIMATIONS,
   normalizeSkinSettings,
   getSkinImagePath
 };

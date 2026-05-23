@@ -11,7 +11,7 @@ const {
 const projectRoot = path.resolve(__dirname, '..');
 
 assert.strictEqual(DEFAULT_SKIN, '奔跑');
-assert.deepStrictEqual(Object.keys(PRESET_SKINS), ['奔跑', '工作', '睡醒', '贴纸', '海里']);
+assert.deepStrictEqual(Object.keys(PRESET_SKINS), ['奔跑', '工作', '睡醒', '贴纸', '海里', '大厨']);
 
 for (const skinName of Object.keys(PRESET_SKINS)) {
   const imagePath = getSkinImagePath({ skin: skinName }, projectRoot);

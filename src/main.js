@@ -3,6 +3,7 @@ const path = require('path');
 const fs = require('fs');
 const { DEFAULT_SKIN, normalizeSkinSettings } = require('./shared/skins');
 const { ACTION_SKIN_MAP, ACTION_ANIMATION_MAP, normalizePetAction } = require('./shared/pet-state');
+const { startUsagePolling, stopUsagePolling } = require('./main/codex-usage');
 
 // 保持对窗口对象的全局引用，避免JavaScript对象被垃圾回收时窗口关闭
 let mainWindow;
@@ -88,8 +89,14 @@ function applySettings() {
   });
   
   // 通知渲染进程更新设置
-  if (mainWindow.webContents) {
+  if (mainWindow?.webContents) {
     mainWindow.webContents.send('settings-updated', userSettings);
+  }
+  if (homeWindow?.webContents) {
+    homeWindow.webContents.send('settings-updated', userSettings);
+  }
+  if (settingsWindow?.webContents) {
+    settingsWindow.webContents.send('settings-updated', userSettings);
   }
 }
 
@@ -155,6 +162,8 @@ function createWindow() {
       mainWindow.webContents.send('initialize-interaction');
       // 应用用户设置
       applySettings();
+      // 启动 Codex 额度监控
+      startUsagePolling(mainWindow);
     }, 500);
   });
   
@@ -858,6 +867,6 @@ ipcMain.on('pet-interaction', (event, action) => {
 
 // 应用即将退出时注销快捷键
 app.on('will-quit', () => {
-  // 注销所有快捷键
+  stopUsagePolling();
   globalShortcut.unregisterAll();
 }); 

@@ -1,7 +1,8 @@
 // 引入electron模块
 const { ipcRenderer } = require('electron');
 const { pathToFileURL } = require('url');
-const { getSkinImagePath } = require('../shared/skins');
+const { getSkinImagePath, DEFAULT_SKIN } = require('../shared/skins');
+const { renderPresetSkins } = require('./preset-skin-ui');
 
 // 窗口控制按钮
 const minimizeBtn = document.getElementById('minimize-btn');
@@ -33,13 +34,41 @@ const soundCheckbox = document.getElementById('sound');
 const volumeSlider = document.getElementById('volume');
 const resetBtn = document.getElementById('reset-btn');
 const saveBtn = document.getElementById('save-btn');
-const skinItems = document.querySelectorAll('.skin-item');
+let skinItems = [];
 const avatarImage = document.getElementById('avatar-image');
 const avatarUploadBtn = document.getElementById('avatar-upload-btn');
 const petActionSelect = document.querySelector('.pet-action-select');
 const managedPetImage = document.getElementById('managed-pet-image');
 const statusPetImage = document.getElementById('status-pet-image');
 let customSkinPath = null;
+
+function initPresetSkins(selectedSkin = DEFAULT_SKIN) {
+  const container = document.querySelector('.pet-skins');
+  skinItems = renderPresetSkins(container, selectedSkin);
+  bindSkinItemClicks();
+}
+
+function bindSkinItemClicks() {
+  skinItems.forEach(item => {
+    item.replaceWith(item.cloneNode(true));
+  });
+  skinItems = document.querySelectorAll('.skin-item');
+
+  skinItems.forEach(item => {
+    item.addEventListener('click', async () => {
+      if (item.dataset.skin === '自定义') {
+        const customSkin = await ipcRenderer.invoke('select-custom-skin');
+        if (!customSkin) return;
+        customSkinPath = customSkin.customSkinPath;
+        updateCustomSkinPreview(customSkinPath);
+      }
+
+      skinItems.forEach(i => i.classList.remove('selected'));
+      item.classList.add('selected');
+      saveSettings();
+    });
+  });
+}
 
 // 窗口控制功能
 if (minimizeBtn) {
@@ -198,7 +227,7 @@ function saveSettings() {
     notification: notificationCheckbox ? notificationCheckbox.checked : true,
     sound: soundCheckbox ? soundCheckbox.checked : true,
     volume: volumeSlider ? parseInt(volumeSlider.value) : 50,
-    skin: document.querySelector('.skin-item.selected') ? document.querySelector('.skin-item.selected').dataset.skin : '奔跑',
+    skin: document.querySelector('.skin-item.selected') ? document.querySelector('.skin-item.selected').dataset.skin : DEFAULT_SKIN,
     customSkinPath: document.querySelector('.skin-item.selected')?.dataset.skin === '自定义' ? customSkinPath : null
   };
   
@@ -374,23 +403,7 @@ if (resetBtn) {
   });
 })();
 
-// 绑定皮肤选择事件
-skinItems.forEach(item => {
-  item.addEventListener('click', async () => {
-    if (item.dataset.skin === '自定义') {
-      const customSkin = await ipcRenderer.invoke('select-custom-skin');
-      if (!customSkin) return;
-      customSkinPath = customSkin.customSkinPath;
-      updateCustomSkinPreview(customSkinPath);
-    }
-
-    // 移除之前的选中状态
-    skinItems.forEach(i => i.classList.remove('selected'));
-    // 设置当前项为选中状态
-    item.classList.add('selected');
-    saveSettings();
-  });
-});
+// 绑定皮肤选择事件（预设皮肤在 initPresetSkins 中绑定）
 
 if (avatarUploadBtn) {
   avatarUploadBtn.addEventListener('click', async (event) => {
@@ -498,6 +511,7 @@ ipcRenderer.on('theme-preference', (event, darkMode) => {
 
 // 页面加载完成后初始化
 document.addEventListener('DOMContentLoaded', () => {
+  initPresetSkins();
   // 加载宠物状态
   loadPetStatus();
   loadSettings();

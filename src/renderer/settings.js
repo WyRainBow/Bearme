@@ -1,6 +1,8 @@
 // 获取Electron的ipcRenderer
 const { ipcRenderer } = require('electron');
 const { pathToFileURL } = require('url');
+const { DEFAULT_SKIN } = require('../shared/skins');
+const { renderPresetSkins } = require('./preset-skin-ui');
 
 // DOM元素
 const closeBtn = document.getElementById('close-btn');
@@ -12,12 +14,41 @@ const clickThrough = document.getElementById('click-through');
 const notification = document.getElementById('notification');
 const sound = document.getElementById('sound');
 const volume = document.getElementById('volume');
-const skinItems = document.querySelectorAll('.skin-item');
+let skinItems = [];
 const header = document.querySelector('.header');
 
 // 当前设置
 let currentSettings = {};
 let customSkinPath = null;
+
+function initPresetSkins(selectedSkin = DEFAULT_SKIN) {
+  const container = document.querySelector('.pet-skins');
+  skinItems = renderPresetSkins(container, selectedSkin);
+  setupSkinHoverEffect();
+  bindSkinItemClicks();
+}
+
+function bindSkinItemClicks() {
+  skinItems.forEach(item => {
+    item.replaceWith(item.cloneNode(true));
+  });
+  skinItems = document.querySelectorAll('.skin-item');
+
+  skinItems.forEach(item => {
+    item.addEventListener('click', async () => {
+      if (item.dataset.skin === '自定义') {
+        const customSkin = await ipcRenderer.invoke('select-custom-skin');
+        if (!customSkin) return;
+        customSkinPath = customSkin.customSkinPath;
+        updateCustomSkinPreview(customSkinPath);
+      }
+
+      selectSkin(item);
+      const newSettings = getSettingsFromUI();
+      ipcRenderer.send('save-settings', newSettings);
+    });
+  });
+}
 
 // 窗口拖动功能
 let isDragging = false;
@@ -94,9 +125,8 @@ function setupSkinHoverEffect() {
 window.addEventListener('DOMContentLoaded', () => {
   // 设置标题栏样式
   header.style.cursor = 'grab';
-  
-  // 设置皮肤悬停效果
-  setupSkinHoverEffect();
+
+  initPresetSkins();
   
   // 添加复选框动画效果
   document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
@@ -125,6 +155,11 @@ window.addEventListener('DOMContentLoaded', () => {
 
   // 监听主进程返回的设置
   ipcRenderer.on('settings', (event, settings) => {
+    currentSettings = settings;
+    updateUIFromSettings(settings);
+  });
+
+  ipcRenderer.on('settings-updated', (event, settings) => {
     currentSettings = settings;
     updateUIFromSettings(settings);
   });
@@ -281,21 +316,7 @@ resetBtn.addEventListener('click', () => {
   });
 })();
 
-// 皮肤选择
-skinItems.forEach(item => {
-  item.addEventListener('click', async () => {
-    if (item.dataset.skin === '自定义') {
-      const customSkin = await ipcRenderer.invoke('select-custom-skin');
-      if (!customSkin) return;
-      customSkinPath = customSkin.customSkinPath;
-      updateCustomSkinPreview(customSkinPath);
-    }
-
-    selectSkin(item);
-    const newSettings = getSettingsFromUI();
-    ipcRenderer.send('save-settings', newSettings);
-  });
-});
+// 皮肤选择（预设皮肤在 initPresetSkins 中绑定）
 
 // 为界面添加一些样式
 document.head.insertAdjacentHTML('beforeend', `

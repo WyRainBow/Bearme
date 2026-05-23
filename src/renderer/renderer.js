@@ -1,6 +1,6 @@
 const { ipcRenderer, contextBridge, remote } = require('electron');
 const { pathToFileURL } = require('url');
-const { getSkinImagePath } = require('../shared/skins');
+const { getSkinImagePath, SKIN_IDLE_ANIMATIONS } = require('../shared/skins');
 
 // 获取DOM元素
 const pet = document.getElementById('pet');
@@ -87,10 +87,10 @@ function applySkin(settings) {
   const imagePath = getSkinImagePath(settings);
   pet.style.backgroundImage = `url("${pathToFileURL(imagePath).href}")`;
 
-  if (settings.skin === '海里') {
-    pet.classList.add('ocean-float');
-  } else {
-    pet.classList.remove('ocean-float');
+  pet.classList.remove(...Object.values(SKIN_IDLE_ANIMATIONS));
+  const idleAnimation = SKIN_IDLE_ANIMATIONS[settings.skin];
+  if (idleAnimation) {
+    pet.classList.add(idleAnimation);
   }
 }
 
@@ -171,6 +171,9 @@ pet.addEventListener('mouseenter', () => {
   // 进入宠物区域时，禁用点击穿透
   isMouseOverPet = true;
   ipcRenderer.send('set-ignore-mouse-events', false);
+
+  const ringsCanvas = document.getElementById('codex-rings-canvas');
+  if (ringsCanvas) ringsCanvas.classList.add('hoverable');
   
   // 显示UI元素
   const interactionButtons = document.querySelector('#interaction-buttons');
@@ -234,6 +237,8 @@ interactionButtons.addEventListener('mouseleave', () => {
 function hideAllUI() {
   const interactionButtons = document.querySelector('#interaction-buttons');
   const messagePopup = document.querySelector('#message-popup');
+  const ringsCanvas = document.getElementById('codex-rings-canvas');
+  if (ringsCanvas) ringsCanvas.classList.remove('hoverable');
   
   // 如果没有显示消息弹窗，才恢复点击穿透
   if (messagePopup.classList.contains('hidden')) {

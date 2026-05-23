@@ -266,4 +266,39 @@ html, body {
 
 .ocean-float {
   animation: oceanFloat 4s ease-in-out infinite !important;
-} 
+}
+
+/* Codex 额度圆环 Canvas */
+#codex-rings-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 300px;
+  height: 300px;
+  z-index: 0;
+  pointer-events: none;
+}
+
+#codex-rings-canvas.hoverable {
+  pointer-events: auto;
+}
+
+/* 大厨皮肤：轻微举牌摇摆 */
+@keyframes chefPresent {
+  0%, 100% {
+    transform: translate(-50%, -50%) translateY(0) rotate(0deg) scale(1);
+  }
+  25% {
+    transform: translate(-50%, -52%) translateY(-8px) rotate(-4deg) scale(1.03);
+  }
+  50% {
+    transform: translate(-50%, -48%) translateY(-4px) rotate(0deg) scale(1.05);
+  }
+  75% {
+    transform: translate(-50%, -51%) translateY(-7px) rotate(4deg) scale(1.03);
+  }
+}
+
+.chef-present {
+  animation: chefPresent 2.6s ease-in-out infinite !important;
+}
