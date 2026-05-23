@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>小窝桌宠 - 主页</title>
+  <link rel="stylesheet" href="modern-style.css">
+  <link rel="stylesheet" href="home-style.css">
+  <!-- 使用Font Awesome图标 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <!-- 主容器 -->
+  <div class="app-container">
+    <!-- 左侧导航栏 -->
+    <div class="sidebar">
+      <div class="avatar-container">
+        <img src="../../assets/pet.png" alt="头像">
+      </div>
+      <div class="sidebar-menu">
+        <div class="menu-item" data-section="pets-section">
+          <i class="fas fa-paw"></i>
+        </div>
+        <div class="menu-item active" data-section="home-section">
+          <i class="fas fa-home"></i>
+        </div>
+        <div class="menu-item" data-section="settings-section">
+          <i class="fas fa-cog"></i>
+        </div>
+        <div class="menu-item" data-section="about-section">
+          <i class="fas fa-info-circle"></i>
+        </div>
+      </div>
+    </div>
+
+    <!-- 主内容区域 -->
+    <div class="main-content">
+      <!-- 窗口控制按钮 -->
+      <div class="title-bar">
+        <div></div>
+        <div class="window-controls">
+          <div class="window-control-btn" id="minimize-btn">
+            <i class="fas fa-minus"></i>
+          </div>
+          <div class="window-control-btn" id="maximize-btn">
+            <i class="fas fa-square"></i>
+          </div>
+          <div class="window-control-btn close" id="close-btn">
+            <i class="fas fa-times"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- 主页内容 -->
+      <div class="content-section active" id="home-section">
+        <!-- 页面标题 -->
+        <div class="page-title">
+          欢迎回来 <span class="title-divider">|</span> 主页
+        </div>
+        <div class="subtitle">
+          这里可以查看你的宠物状态、每日任务和互动选项
+        </div>
+
+        <!-- 主要内容区域 -->
+        <div class="home-content">
+          <!-- 宠物状态卡片 -->
+          <div class="status-card">
+            <div class="status-header">
+              <h2>宠物状态</h2>
+              <span class="refresh-btn"><i class="fas fa-sync-alt"></i></span>
+            </div>
+            <div class="pet-preview">
+              <img src="../../assets/pet.png" alt="宠物预览">
+            </div>
+            <div class="status-info">
+              <div class="status-item">
+                <div class="status-label">名称</div>
+                <div class="status-value" id="pet-name">自嘲熊</div>
+              </div>
+              <div class="status-item">
+                <div class="status-label">等级</div>
+                <div class="status-value"><span id="pet-level">5</span></div>
+              </div>
+              <div class="status-item">
+                <div class="status-label">经验值</div>
+                <div class="status-value">
+                  <div class="exp-bar">
+                    <div class="exp-progress" style="width: 65%;"></div>
+                  </div>
+                  <span id="exp-value">325/500</span>
+                </div>
+              </div>
+              <div class="status-item">
+                <div class="status-label">心情</div>
+                <div class="status-value">
+                  <div class="mood-indicator happy">
+                    <i class="fas fa-smile"></i> 开心
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- 每日任务卡片 -->
+          <div class="daily-tasks-card">
+            <div class="card-header">
+              <h2>每日任务</h2>
+            </div>
+            <div class="tasks-list">
+              <div class="task-item completed">
+                <div class="task-checkbox">
+                  <i class="fas fa-check-circle"></i>
+                </div>
+                <div class="task-content">
+                  <div class="task-title">每日签到</div>
+                  <div class="task-description">连续签到5天</div>
+                </div>
+                <div class="task-reward">+20 经验</div>
+              </div>
+              <div class="task-item">
+                <div class="task-checkbox">
+                  <i class="far fa-circle"></i>
+                </div>
+                <div class="task-content">
+                  <div class="task-title">互动时间</div>
+                  <div class="task-description">与宠物互动5分钟</div>
+                </div>
+                <div class="task-reward">+15 经验</div>
+              </div>
+              <div class="task-item">
+                <div class="task-checkbox">
+                  <i class="far fa-circle"></i>
+                </div>
+                <div class="task-content">
+                  <div class="task-title">喂养宠物</div>
+                  <div class="task-description">给宠物喂食一次</div>
+                </div>
+                <div class="task-reward">+10 经验</div>
+              </div>
+              <div class="task-item">
+                <div class="task-checkbox">
+                  <i class="far fa-circle"></i>
+                </div>
+                <div class="task-content">
+                  <div class="task-title">宠物玩耍</div>
+                  <div class="task-description">陪宠物玩游戏</div>
+                </div>
+                <div class="task-reward">+15 经验</div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- 互动卡片 -->
+          <div class="interaction-card">
+            <div class="card-header">
+              <h2>快捷互动</h2>
+            </div>
+            <div class="interaction-buttons">
+              <div class="interaction-btn" id="feed-btn">
+                <div class="btn-icon"><i class="fas fa-utensils"></i></div>
+                <div class="btn-label">喂食</div>
+              </div>
+              <div class="interaction-btn" id="play-btn">
+                <div class="btn-icon"><i class="fas fa-gamepad"></i></div>
+                <div class="btn-label">玩耍</div>
+              </div>
+              <div class="interaction-btn" id="pet-btn">
+                <div class="btn-icon"><i class="fas fa-hand-sparkles"></i></div>
+                <div class="btn-label">抚摸</div>
+              </div>
+              <div class="interaction-btn" id="sleep-btn">
+                <div class="btn-icon"><i class="fas fa-moon"></i></div>
+                <div class="btn-label">睡觉</div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- 宠物心情日志 -->
+          <div class="mood-log-card">
+            <div class="card-header">
+              <h2>互动日志</h2>
+            </div>
+            <div class="log-list">
+              <div class="log-item">
+                <div class="log-time">10:30</div>
+                <div class="log-message">宠物感到很开心，因为你抚摸了它</div>
+              </div>
+              <div class="log-item">
+                <div class="log-time">09:15</div>
+                <div class="log-message">宠物吃得很香，心情愉悦</div>
+              </div>
+              <div class="log-item">
+                <div class="log-time">昨天</div>
+                <div class="log-message">宠物和你一起玩耍，非常兴奋</div>
+              </div>
+              <div class="log-item">
+                <div class="log-time">昨天</div>
+                <div class="log-message">宠物睡了一个好觉，精力充沛</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- 宠物管理内容 -->
+      <div class="content-section" id="pets-section">
+        <!-- 页面标题 -->
+        <div class="page-title">
+          我的宠物 <span class="title-divider">|</span> 管理
+        </div>
+        <div class="subtitle">
+          认识你的毛茸茸朋友，一个忠诚的伙伴，喜欢陪伴和拥抱
+        </div>
+
+        <!-- 搜索框 -->
+        <div class="search-container">
+          <input type="text" class="search-input" placeholder="搜索我的宠物">
+        </div>
+
+        <!-- 宠物卡片容器 -->
+        <div class="pet-cards-container">
+          <!-- 宠物卡片 -->
+          <div class="pet-card">
+            <div class="pet-image-container">
+              <img src="../../assets/pet.png" alt="宠物" class="pet-image">
+            </div>
+            <div class="pet-name">自嘲熊</div>
+            <select class="pet-action-select">
+              <option value="default">默认状态</option>
+              <option value="jump">跳跃</option>
+              <option value="sleep">睡觉</option>
+              <option value="play">玩耍</option>
+            </select>
+            <button class="delete-btn">
+              <i class="fas fa-trash"></i> 删除
+            </button>
+          </div>
+          
+          <!-- 添加宠物卡片 -->
+          <div class="add-pet-card">
+            <div class="add-icon">+</div>
+            <span>添加新宠物</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 设置内容 -->
+      <div class="content-section" id="settings-section">
+        <!-- 页面标题 -->
+        <div class="page-title">
+          系统设置 <span class="title-divider">|</span> 偏好
+        </div>
+        <div class="subtitle">
+          自定义你的桌面宠物体验，调整外观和行为
+        </div>
+
+        <div class="settings-content">
+          <div class="settings-section">
+            <h2>基本设置</h2>
+            <div class="setting-item">
+              <label for="auto-start">开机自启动</label>
+              <input type="checkbox" id="auto-start">
+            </div>
+            <div class="setting-item">
+              <label for="always-on-top">始终置顶</label>
+              <input type="checkbox" id="always-on-top" checked>
+            </div>
+            <div class="setting-item">
+              <label for="click-through">点击穿透</label>
+              <input type="checkbox" id="click-through" checked>
+            </div>
+          </div>
+          
+          <div class="settings-section">
+            <h2>宠物外观</h2>
+            <div class="pet-skins">
+              <div class="skin-item selected">
+                <img src="../../assets/pet.png" alt="默认皮肤">
+                <span>默认</span>
+              </div>
+              <div class="skin-item">
+                <img src="../../assets/自嘲熊run.gif" alt="奔跑">
+                <span>奔跑</span>
+              </div>
+              <div class="skin-item">
+                <img src="../../assets/自嘲熊work.gif" alt="工作">
+                <span>工作</span>
+              </div>
+              <div class="skin-item locked">
+                <img src="../../assets/自嘲熊睡醒.gif" alt="睡醒">
+                <span>睡醒</span>
+                <div class="lock-icon">🔒</div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="settings-section">
+            <h2>互动设置</h2>
+            <div class="setting-item">
+              <label for="notification">启用通知</label>
+              <input type="checkbox" id="notification" checked>
+            </div>
+            <div class="setting-item">
+              <label for="sound">启用音效</label>
+              <input type="checkbox" id="sound" checked>
+            </div>
+            <div class="setting-item">
+              <label for="volume">音量</label>
+              <input type="range" id="volume" min="0" max="100" value="50">
+            </div>
+          </div>
+          
+          <div class="settings-actions">
+            <button id="reset-btn">恢复默认</button>
+            <button id="save-btn">保存设置</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 关于内容 -->
+      <div class="content-section" id="about-section">
+        <!-- 页面标题 -->
+        <div class="page-title">
+          关于应用 <span class="title-divider">|</span> 信息
+        </div>
+        <div class="subtitle">
+          了解更多关于桌面宠物应用的信息
+        </div>
+
+        <div class="about-content">
+          <div class="about-card">
+            <div class="about-header">
+              <img src="../../assets/pet.png" alt="应用图标" class="about-icon">
+              <div class="about-title">
+                <h2>小窝桌宠</h2>
+                <div class="version">版本 1.0.0</div>
+              </div>
+            </div>
+            <div class="about-description">
+              <p>小窝桌宠是一款让您的桌面更生动有趣的应用程序。它为您提供可爱的虚拟伙伴，陪伴您工作和休闲。</p>
+              <p>特色功能：</p>
+              <ul>
+                <li>可爱的桌面宠物，拥有多种互动方式</li>
+                <li>任务系统，让您的宠物成长</li>
+                <li>自定义外观和行为</li>
+                <li>多种皮肤选择</li>
+              </ul>
+            </div>
+            <div class="about-footer">
+              <div class="copyright">© 2025 雏结. 保留所有权利。</div>
+              <div class="links">
+                <a href="https://kingdomofown.cn" class="about-link">官方网站</a>
+                <a href="https://learn.kingdomofown.cn" class="about-link">使用帮助</a>
+                <a href="https://king.kingdomofown.cn" class="about-link">联系我们</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 底部工具栏 -->
+      <div class="bottom-tools">
+        <div class="theme-toggle" id="theme-toggle">
+          <i class="fas fa-moon"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="home.js"></script>
+</body>
+</html> 

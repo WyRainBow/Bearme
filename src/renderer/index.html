@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>桌面宠物</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="pet-container">
+    <div id="pet" draggable="true"></div>
+    
+    <!-- 等级显示 -->
+    <div id="level-badge">Lv.1</div>
+    
+    <!-- 经验条 -->
+    <div id="exp-bar-container">
+      <div id="exp-bar"></div>
+      <span id="exp-text">0/100</span>
+    </div>
+    
+    <!-- 互动按钮组 -->
+    <div id="interaction-buttons" class="hidden">
+      <button class="circular-button sign-in" title="每日签到">
+        <span class="icon">📝</span>
+      </button>
+      <button class="circular-button interact" title="互动">
+        <span class="icon">🎮</span>
+      </button>
+      <button class="circular-button daily-quote" title="每日金句">
+        <span class="icon">💬</span>
+      </button>
+    </div>
+    
+    <!-- 弹出消息 -->
+    <div id="message-popup" class="hidden">
+      <div class="message-content"></div>
+      <button class="close-message">×</button>
+    </div>
+    
+    <!-- 经验获取弹窗 -->
+    <div id="exp-gain" class="hidden">+10 经验</div>
+  </div>
+
+  <script src="renderer.js"></script>
+</body>
+</html> 

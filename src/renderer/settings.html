@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>桌面宠物设置</title>
+  <link rel="stylesheet" href="settings-new.css">
+</head>
+<body>
+  <div class="settings-container">
+    <div class="header">
+      <h1>桌面宠物设置</h1>
+      <button id="close-btn">×</button>
+    </div>
+    
+    <div class="settings-content">
+      <div class="settings-section">
+        <h2>基本设置</h2>
+        <div class="setting-item">
+          <label for="auto-start">开机自启动</label>
+          <input type="checkbox" id="auto-start">
+        </div>
+        <div class="setting-item">
+          <label for="always-on-top">始终置顶</label>
+          <input type="checkbox" id="always-on-top" checked>
+        </div>
+        <div class="setting-item">
+          <label for="click-through">点击穿透</label>
+          <input type="checkbox" id="click-through" checked>
+        </div>
+      </div>
+      
+      <div class="settings-section">
+        <h2>宠物外观</h2>
+        <div class="pet-skins">
+          <div class="skin-item selected">
+            <img src="../../assets/pet.png" alt="默认皮肤">
+            <span>默认</span>
+          </div>
+          <div class="skin-item">
+            <img src="../../assets/自嘲熊run.gif" alt="奔跑">
+            <span>奔跑</span>
+          </div>
+          <div class="skin-item">
+            <img src="../../assets/自嘲熊work.gif" alt="工作">
+            <span>工作</span>
+          </div>
+          <div class="skin-item locked">
+            <img src="../../assets/自嘲熊睡醒.gif" alt="睡醒">
+            <span>睡醒</span>
+            <div class="lock-icon">🔒</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="settings-section">
+        <h2>互动设置</h2>
+        <div class="setting-item">
+          <label for="notification">启用通知</label>
+          <input type="checkbox" id="notification" checked>
+        </div>
+        <div class="setting-item">
+          <label for="sound">启用音效</label>
+          <input type="checkbox" id="sound" checked>
+        </div>
+        <div class="setting-item">
+          <label for="volume">音量</label>
+          <input type="range" id="volume" min="0" max="100" value="50">
+        </div>
+      </div>
+      
+      <div class="settings-section">
+        <h2>关于</h2>
+        <div class="about-info">
+          <p>桌面宠物 v1.0.0</p>
+          <p>让您的桌面更有趣的小伙伴</p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="footer">
+      <button id="reset-btn">恢复默认</button>
+      <button id="save-btn">保存设置</button>
+    </div>
+  </div>
+  
+  <script src="settings.js"></script>
+</body>
+</html> 

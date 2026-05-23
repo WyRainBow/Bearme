@@ -1,0 +1,48 @@
+{
+  "name": "deskpet",
+  "version": "1.0.0",
+  "description": "桌面宠物应用",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "electron .",
+    "start:mac": "open -na \"$PWD/node_modules/electron/dist/Electron.app\" --args \"$PWD\"",
+    "dev": "electron .",
+    "build": "electron-builder",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "desktop",
+    "pet",
+    "electron"
+  ],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^28.2.3",
+    "electron-builder": "^24.9.1"
+  },
+  "build": {
+    "appId": "com.deskpet.app",
+    "productName": "小窝桌宠",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "src/**/*",
+      "assets/**/*",
+      "package.json"
+    ],
+    "win": {
+      "target": [
+        "nsis"
+      ],
+      "icon": "assets/tray.png"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
+    }
+  }
+}

@@ -1,0 +1,734 @@
+/* 主页特定样式 */
+.home-content {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: auto;
+  gap: 20px;
+  overflow-y: auto;
+  padding-right: 5px;
+  flex: 1;
+}
+
+/* 内容区域样式 */
+.content-section {
+  display: none;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden;
+}
+
+.content-section.active {
+  display: flex;
+}
+
+/* 卡片公共样式 */
+.status-card, .daily-tasks-card, .interaction-card, .mood-log-card {
+  background-color: white;
+  border-radius: 12px;
+  border: 1px solid var(--card-border);
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+}
+
+.status-card:hover, .daily-tasks-card:hover, .interaction-card:hover, .mood-log-card:hover {
+  box-shadow: var(--card-shadow);
+  transform: translateY(-3px);
+}
+
+/* 卡片标题样式 */
+.status-header, .card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.status-header h2, .card-header h2 {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+.refresh-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  color: var(--text-color-light);
+  transition: all 0.2s;
+}
+
+.refresh-btn:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+  color: var(--primary-color);
+}
+
+/* 宠物状态卡片 */
+.status-card {
+  grid-column: 1;
+  grid-row: 1 / span 2;
+  display: flex;
+  flex-direction: column;
+}
+
+.pet-preview {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+  height: 180px;
+}
+
+.pet-preview img {
+  max-height: 100%;
+  max-width: 150px;
+  object-fit: contain;
+}
+
+.status-info {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.status-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 5px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.status-label {
+  font-weight: 500;
+  color: var(--text-color);
+}
+
+.status-value {
+  display: flex;
+  align-items: center;
+  color: var(--text-color);
+}
+
+/* 经验条 */
+.exp-bar {
+  width: 120px;
+  height: 8px;
+  background-color: #f0f0f0;
+  border-radius: 4px;
+  margin-right: 10px;
+  overflow: hidden;
+}
+
+.exp-progress {
+  height: 100%;
+  background-color: var(--primary-color);
+  border-radius: 4px;
+}
+
+#exp-value {
+  font-size: 12px;
+  color: var(--text-color-light);
+}
+
+/* 心情指示器 */
+.mood-indicator {
+  padding: 5px 10px;
+  border-radius: 15px;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.mood-indicator.happy {
+  background-color: rgba(76, 175, 80, 0.1);
+  color: #4CAF50;
+}
+
+.mood-indicator.normal {
+  background-color: rgba(255, 193, 7, 0.1);
+  color: #FFC107;
+}
+
+.mood-indicator.sad {
+  background-color: rgba(244, 67, 54, 0.1);
+  color: #F44336;
+}
+
+/* 每日任务卡片 */
+.daily-tasks-card {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.tasks-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.task-item {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  border-radius: 8px;
+  transition: all 0.2s;
+}
+
+.task-item:hover {
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
+.task-checkbox {
+  margin-right: 12px;
+  font-size: 18px;
+  color: var(--text-color-light);
+}
+
+.task-content {
+  flex: 1;
+}
+
+.task-title {
+  font-weight: 500;
+  font-size: 14px;
+  margin-bottom: 2px;
+  color: var(--text-color);
+}
+
+.task-description {
+  font-size: 12px;
+  color: var(--text-color-light);
+}
+
+.task-reward {
+  font-weight: 500;
+  font-size: 12px;
+  color: var(--primary-color);
+}
+
+.task-item.completed .task-checkbox {
+  color: #4CAF50;
+}
+
+.task-item.completed .task-title {
+  text-decoration: line-through;
+  color: var(--text-color-light);
+}
+
+/* 互动卡片 */
+.interaction-card {
+  grid-column: 2;
+  grid-row: 2;
+}
+
+.interaction-buttons {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+}
+
+.interaction-btn {
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.interaction-btn:hover {
+  background-color: rgba(255, 122, 122, 0.1);
+  transform: translateY(-3px);
+}
+
+.btn-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background-color: white;
+  color: var(--primary-color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 20px;
+  margin-bottom: 8px;
+  transition: all 0.2s;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.interaction-btn:hover .btn-icon {
+  background-color: var(--primary-color);
+  color: white;
+  box-shadow: 0 3px 8px rgba(255, 122, 122, 0.3);
+}
+
+.btn-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-color);
+}
+
+/* 日志卡片 */
+.mood-log-card {
+  grid-column: 1 / span 2;
+  grid-row: 3;
+}
+
+.log-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.log-item {
+  display: flex;
+  padding: 10px;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  transition: all 0.2s;
+}
+
+.log-item:hover {
+  background-color: rgba(255, 122, 122, 0.05);
+}
+
+.log-time {
+  min-width: 60px;
+  font-size: 12px;
+  color: var(--text-color-light);
+  font-weight: 500;
+}
+
+.log-message {
+  flex: 1;
+  font-size: 14px;
+  color: var(--text-color);
+}
+
+/* 宠物卡片容器 */
+.pet-cards-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+  overflow-y: auto;
+  padding-right: 5px;
+  margin-top: 20px;
+  flex: 1;
+}
+
+/* 宠物卡片 */
+.pet-card {
+  background-color: white;
+  border-radius: 12px;
+  border: 1px solid var(--card-border);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  transition: all 0.3s ease;
+  position: relative;
+  box-shadow: var(--card-shadow);
+}
+
+.pet-card:hover {
+  transform: translateY(-3px);
+}
+
+.pet-image-container {
+  width: 120px;
+  height: 160px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.pet-image {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.pet-name {
+  font-weight: 600;
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.pet-action-select {
+  width: 100%;
+  height: 36px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  margin-bottom: 15px;
+  padding: 0 10px;
+  background-color: #f9f9f9;
+  outline: none;
+  cursor: pointer;
+}
+
+.pet-action-select:focus {
+  border-color: var(--primary-color);
+}
+
+.delete-btn {
+  width: 100%;
+  height: 36px;
+  background-color: white;
+  border: 1px solid var(--btn-danger);
+  color: var(--btn-danger);
+  border-radius: 6px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 14px;
+}
+
+.delete-btn i {
+  margin-right: 5px;
+  font-size: 16px;
+}
+
+.delete-btn:hover {
+  background-color: var(--btn-danger);
+  color: white;
+}
+
+/* 添加宠物卡片 */
+.add-pet-card {
+  background-color: #f9f9f9;
+  border-radius: 12px;
+  border: 2px dashed #ddd;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 300px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.add-pet-card:hover {
+  border-color: var(--primary-color);
+  background-color: rgba(255, 122, 122, 0.05);
+}
+
+.add-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: #f0f0f0;
+  color: var(--text-color-light);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 30px;
+  margin-bottom: 15px;
+}
+
+.add-pet-card:hover .add-icon {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+/* 设置部分样式 */
+.settings-content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  overflow-y: auto;
+  flex: 1;
+  padding-right: 5px;
+}
+
+.settings-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+  gap: 10px;
+}
+
+#reset-btn, #save-btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-weight: 500;
+}
+
+#reset-btn {
+  background-color: #f0f0f0;
+  color: var(--text-color);
+}
+
+#save-btn {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+#reset-btn:hover {
+  background-color: #e0e0e0;
+}
+
+#save-btn:hover {
+  background-color: var(--primary-dark, #ff6767);
+}
+
+/* 皮肤选择器 */
+.pet-skins {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 15px;
+}
+
+.skin-item {
+  position: relative;
+  border: 2px solid var(--border-color);
+  border-radius: 12px;
+  padding: 10px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  background-color: white;
+}
+
+.skin-item img {
+  width: 70px;
+  height: 70px;
+  object-fit: contain;
+  margin-bottom: 8px;
+}
+
+.skin-item span {
+  display: block;
+  font-size: 14px;
+  color: var(--text-color);
+}
+
+.skin-item.selected {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(255, 122, 122, 0.2);
+}
+
+.skin-item.locked {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.lock-icon {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  font-size: 16px;
+}
+
+/* 设置项目 */
+.setting-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.setting-item label {
+  font-weight: 500;
+  color: var(--text-color);
+}
+
+input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+input[type="range"] {
+  width: 150px;
+  cursor: pointer;
+}
+
+/* 关于部分样式 */
+.about-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding-right: 5px;
+  overflow-y: auto;
+}
+
+.about-card {
+  background-color: white;
+  border-radius: 12px;
+  border: 1px solid var(--card-border);
+  padding: 25px;
+  box-shadow: var(--card-shadow);
+  margin-bottom: 20px;
+}
+
+.about-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.about-icon {
+  width: 80px;
+  height: 80px;
+  margin-right: 20px;
+  object-fit: contain;
+}
+
+.about-title h2 {
+  font-size: 24px;
+  margin-bottom: 5px;
+  color: var(--text-color);
+}
+
+.version {
+  font-size: 14px;
+  color: var(--text-color-light);
+}
+
+.about-description {
+  line-height: 1.6;
+  margin-bottom: 25px;
+  color: var(--text-color);
+}
+
+.about-description p {
+  margin-bottom: 15px;
+}
+
+.about-description ul {
+  padding-left: 20px;
+  margin-bottom: 15px;
+}
+
+.about-description li {
+  margin-bottom: 8px;
+}
+
+.about-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-top: 15px;
+  border-top: 1px solid var(--border-color);
+}
+
+.copyright {
+  font-size: 12px;
+  color: var(--text-color-light);
+}
+
+.links {
+  display: flex;
+  gap: 15px;
+}
+
+.about-link {
+  color: var(--primary-color);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.about-link:hover {
+  text-decoration: underline;
+}
+
+/* 暗黑模式适配 */
+body.dark-mode .status-card,
+body.dark-mode .daily-tasks-card,
+body.dark-mode .interaction-card,
+body.dark-mode .mood-log-card,
+body.dark-mode .pet-card,
+body.dark-mode .about-card,
+body.dark-mode .settings-section {
+  background-color: #232323;
+  border-color: var(--card-border);
+}
+
+body.dark-mode .task-item:hover,
+body.dark-mode .log-item {
+  background-color: #2a2a2a;
+}
+
+body.dark-mode .log-item:hover {
+  background-color: rgba(255, 122, 122, 0.1);
+}
+
+body.dark-mode .interaction-btn,
+body.dark-mode .add-pet-card {
+  background-color: #2a2a2a;
+}
+
+body.dark-mode .btn-icon {
+  background-color: #333;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+body.dark-mode .exp-bar {
+  background-color: #444;
+}
+
+body.dark-mode .skin-item {
+  background-color: #2a2a2a;
+}
+
+body.dark-mode #reset-btn {
+  background-color: #333;
+  color: #e0e0e0;
+}
+
+body.dark-mode a.about-link {
+  color: #ff9e9e;
+}
+
+/* 响应式设计 */
+@media (max-width: 900px) {
+  .home-content {
+    grid-template-columns: 1fr;
+  }
+  
+  .status-card {
+    grid-column: 1;
+    grid-row: 1;
+  }
+  
+  .daily-tasks-card {
+    grid-column: 1;
+    grid-row: 2;
+  }
+  
+  .interaction-card {
+    grid-column: 1;
+    grid-row: 3;
+  }
+  
+  .mood-log-card {
+    grid-column: 1;
+    grid-row: 4;
+  }
+  
+  .pet-skins {
+    grid-template-columns: repeat(2, 1fr);
+  }
+} 
