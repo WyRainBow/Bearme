@@ -89,7 +89,7 @@
               </div>
             </div>
           </div>
-          
+
           <!-- 每日任务卡片 -->
           <div class="daily-tasks-card">
             <div class="card-header">
@@ -125,7 +125,44 @@
               </div>
             </div>
           </div>
-          
+
+          <!-- Codex 额度卡片 -->
+          <div class="codex-usage-card">
+            <div class="card-header">
+              <div>
+                <h2>Codex 额度</h2>
+                <div class="codex-source" id="codex-source">等待数据</div>
+              </div>
+              <button class="codex-refresh-btn" id="codex-refresh-btn" type="button" title="刷新 Codex 额度">
+                <i class="fas fa-sync-alt"></i>
+              </button>
+            </div>
+            <div class="codex-plan-row">
+              <span class="codex-provider">Codex</span>
+              <span class="codex-plan" id="codex-plan">--</span>
+            </div>
+            <div class="codex-meter" data-window="primary">
+              <div class="codex-meter-top">
+                <span>5h / Session</span>
+                <span id="codex-primary-value">--</span>
+              </div>
+              <div class="codex-meter-track">
+                <div class="codex-meter-fill" id="codex-primary-bar"></div>
+              </div>
+              <div class="codex-meter-foot" id="codex-primary-reset">等待 Codex 额度数据</div>
+            </div>
+            <div class="codex-meter" data-window="secondary">
+              <div class="codex-meter-top">
+                <span>Weekly</span>
+                <span id="codex-secondary-value">--</span>
+              </div>
+              <div class="codex-meter-track">
+                <div class="codex-meter-fill secondary" id="codex-secondary-bar"></div>
+              </div>
+              <div class="codex-meter-foot" id="codex-secondary-reset">等待 Codex 额度数据</div>
+            </div>
+          </div>
+
           <!-- 互动卡片 -->
           <div class="interaction-card">
             <div class="card-header">
@@ -150,10 +187,10 @@
               </div>
             </div>
           </div>
-          
+
         </div>
       </div>
-      
+
       <!-- 宠物管理内容 -->
       <div class="content-section" id="pets-section">
         <!-- 页面标题 -->
@@ -187,7 +224,7 @@
               <i class="fas fa-trash"></i> 删除
             </button>
           </div>
-          
+
           <!-- 添加宠物卡片 -->
           <div class="add-pet-card">
             <div class="add-icon">+</div>
@@ -203,7 +240,7 @@
           系统设置 <span class="title-divider">|</span> 偏好
         </div>
         <div class="subtitle">
-          自定义你的桌面宠物体验，调整外观和行为
+          自定义你的桌面宠物体验、调整外观和行为
         </div>
 
         <div class="settings-content">
@@ -222,7 +259,7 @@
               <input type="checkbox" id="click-through" checked>
             </div>
           </div>
-          
+
           <div class="settings-section">
             <h2>宠物外观</h2>
             <div class="pet-skins">
@@ -232,7 +269,7 @@
               </div>
             </div>
           </div>
-          
+
           <div class="settings-section">
             <h2>互动设置</h2>
             <div class="setting-item">
@@ -248,7 +285,7 @@
               <input type="range" id="volume" min="0" max="100" value="50">
             </div>
           </div>
-          
+
           <div class="settings-actions">
             <button id="reset-btn">恢复默认</button>
             <button id="save-btn">保存设置</button>
@@ -298,4 +335,4 @@
 
   <script src="home.js"></script>
 </body>
-</html> 
+</html>

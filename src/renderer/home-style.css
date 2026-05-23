@@ -22,7 +22,7 @@
 }
 
 /* 卡片公共样式 */
-.status-card, .daily-tasks-card, .interaction-card {
+.status-card, .daily-tasks-card, .interaction-card, .codex-usage-card {
   background-color: white;
   border-radius: 12px;
   border: 1px solid var(--card-border);
@@ -31,7 +31,7 @@
   transition: all 0.3s ease;
 }
 
-.status-card:hover, .daily-tasks-card:hover, .interaction-card:hover {
+.status-card:hover, .daily-tasks-card:hover, .interaction-card:hover, .codex-usage-card:hover {
   box-shadow: var(--card-shadow);
   transform: translateY(-3px);
 }
@@ -72,7 +72,7 @@
 /* 宠物状态卡片 */
 .status-card {
   grid-column: 1;
-  grid-row: 1 / span 2;
+  grid-row: 1 / span 3;
   display: flex;
   flex-direction: column;
 }
@@ -205,7 +205,112 @@
 /* 互动卡片 */
 .interaction-card {
   grid-column: 2;
+  grid-row: 3;
+}
+
+/* Codex 额度卡片 */
+.codex-usage-card {
+  grid-column: 2;
   grid-row: 2;
+}
+
+.codex-usage-card .card-header {
+  align-items: flex-start;
+}
+
+.codex-source {
+  color: var(--text-color-light);
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+.codex-refresh-btn {
+  width: 32px;
+  height: 32px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--text-color-light);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.codex-refresh-btn:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+  color: var(--primary-color);
+}
+
+.codex-plan-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.codex-provider {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-color);
+}
+
+.codex-plan {
+  padding: 4px 10px;
+  border-radius: 999px;
+  background-color: rgba(255, 122, 122, 0.1);
+  color: var(--primary-color);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.codex-meter + .codex-meter {
+  margin-top: 14px;
+}
+
+.codex-meter-top,
+.codex-meter-foot {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.codex-meter-top {
+  color: var(--text-color);
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.codex-meter-foot {
+  color: var(--text-color-light);
+  font-size: 12px;
+  margin-top: 7px;
+}
+
+.codex-meter-track {
+  height: 9px;
+  border-radius: 999px;
+  overflow: hidden;
+  background-color: #f0f0f0;
+}
+
+.codex-meter-fill {
+  width: 0%;
+  height: 100%;
+  border-radius: inherit;
+  background-color: #22c55e;
+  transition: width 0.3s ease, background-color 0.3s ease;
+}
+
+.codex-meter-fill.secondary {
+  background-color: #7c8cff;
+}
+
+.codex-meter-fill.warning {
+  background-color: #ffb020;
+}
+
+.codex-meter-fill.danger {
+  background-color: #ef4444;
 }
 
 .interaction-buttons {
@@ -625,6 +730,7 @@ input[type="range"] {
 body.dark-mode .status-card,
 body.dark-mode .daily-tasks-card,
 body.dark-mode .interaction-card,
+body.dark-mode .codex-usage-card,
 body.dark-mode .pet-card,
 body.dark-mode .about-card,
 body.dark-mode .settings-section {
@@ -640,6 +746,10 @@ body.dark-mode .task-item:hover {
 body.dark-mode .interaction-btn,
 body.dark-mode .add-pet-card {
   background-color: #2a2a2a;
+}
+
+body.dark-mode .codex-meter-track {
+  background-color: #333;
 }
 
 body.dark-mode .btn-icon {
@@ -679,6 +789,11 @@ body.dark-mode a.about-link {
   .interaction-card {
     grid-column: 1;
     grid-row: 3;
+  }
+
+  .codex-usage-card {
+    grid-column: 1;
+    grid-row: 4;
   }
   
   .pet-skins {

@@ -3,7 +3,7 @@ const path = require('path');
 const fs = require('fs');
 const { DEFAULT_SKIN, normalizeSkinSettings } = require('./shared/skins');
 const { ACTION_SKIN_MAP, ACTION_ANIMATION_MAP, normalizePetAction } = require('./shared/pet-state');
-const { startUsagePolling, stopUsagePolling } = require('./main/codex-usage');
+const { startUsagePolling, stopUsagePolling, fetchUsageData } = require('./main/codex-usage');
 
 // 保持对窗口对象的全局引用，避免JavaScript对象被垃圾回收时窗口关闭
 let mainWindow;
@@ -163,7 +163,7 @@ function createWindow() {
       // 应用用户设置
       applySettings();
       // 启动 Codex 额度监控
-      startUsagePolling(mainWindow);
+      startUsagePolling(() => [mainWindow, homeWindow]);
     }, 500);
   });
   
@@ -576,6 +576,10 @@ ipcMain.on('drag-end', () => {
 // 监听获取设置请求
 ipcMain.on('get-settings', (event) => {
   event.reply('settings', userSettings);
+});
+
+ipcMain.handle('get-codex-usage', async () => {
+  return fetchUsageData();
 });
 
 // 监听保存设置请求

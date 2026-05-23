@@ -150,16 +150,29 @@ function formatCountdown(seconds) {
   return `${m}m`;
 }
 
-async function poll(mainWindow) {
-  const data = await fetchUsageData();
-  if (data && mainWindow && !mainWindow.isDestroyed()) {
-    mainWindow.webContents.send('codex-usage-update', data);
+function resolveTargets(targets) {
+  const resolved = typeof targets === 'function' ? targets() : targets;
+  return Array.isArray(resolved) ? resolved : [resolved];
+}
+
+function sendUsageUpdate(targets, data) {
+  for (const target of resolveTargets(targets)) {
+    if (target && !target.isDestroyed() && target.webContents) {
+      target.webContents.send('codex-usage-update', data);
+    }
   }
 }
 
-function startUsagePolling(mainWindow) {
-  poll(mainWindow);
-  pollTimer = setInterval(() => poll(mainWindow), POLL_INTERVAL);
+async function poll(targets) {
+  const data = await fetchUsageData();
+  if (data) {
+    sendUsageUpdate(targets, data);
+  }
+}
+
+function startUsagePolling(targets) {
+  poll(targets);
+  pollTimer = setInterval(() => poll(targets), POLL_INTERVAL);
 }
 
 function stopUsagePolling() {
@@ -175,5 +188,6 @@ module.exports = {
   normalizeBucket,
   extractJsonFromLog,
   formatCountdown,
-  readAuthToken
+  readAuthToken,
+  sendUsageUpdate
 };

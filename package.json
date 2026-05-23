@@ -8,7 +8,7 @@
     "start:mac": "open -na \"$PWD/node_modules/electron/dist/Electron.app\" --args \"$PWD\"",
     "dev": "electron .",
     "build": "electron-builder",
-    "test": "node test/skin-utils.test.js && node test/no-gamification.test.js && node test/pet-state.test.js && node test/avatar-ui.test.js"
+    "test": "node test/skin-utils.test.js && node test/no-gamification.test.js && node test/pet-state.test.js && node test/avatar-ui.test.js && node test/codex-home-ui.test.js"
   },
   "keywords": [
     "desktop",

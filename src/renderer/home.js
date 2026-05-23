@@ -40,6 +40,15 @@ const avatarUploadBtn = document.getElementById('avatar-upload-btn');
 const petActionSelect = document.querySelector('.pet-action-select');
 const managedPetImage = document.getElementById('managed-pet-image');
 const statusPetImage = document.getElementById('status-pet-image');
+const codexRefreshBtn = document.getElementById('codex-refresh-btn');
+const codexSource = document.getElementById('codex-source');
+const codexPlan = document.getElementById('codex-plan');
+const codexPrimaryValue = document.getElementById('codex-primary-value');
+const codexPrimaryBar = document.getElementById('codex-primary-bar');
+const codexPrimaryReset = document.getElementById('codex-primary-reset');
+const codexSecondaryValue = document.getElementById('codex-secondary-value');
+const codexSecondaryBar = document.getElementById('codex-secondary-bar');
+const codexSecondaryReset = document.getElementById('codex-secondary-reset');
 let customSkinPath = null;
 
 function initPresetSkins(selectedSkin = DEFAULT_SKIN) {
@@ -169,6 +178,24 @@ function loadSettings() {
   ipcRenderer.send('get-settings');
 }
 
+async function loadCodexUsage() {
+  if (!codexRefreshBtn) return;
+
+  codexRefreshBtn.classList.add('loading');
+  const icon = codexRefreshBtn.querySelector('i');
+  if (icon) icon.classList.add('fa-spin');
+
+  try {
+    const data = await ipcRenderer.invoke('get-codex-usage');
+    updateCodexUsage(data);
+  } catch {
+    updateCodexUsage(null);
+  } finally {
+    if (icon) icon.classList.remove('fa-spin');
+    codexRefreshBtn.classList.remove('loading');
+  }
+}
+
 // 更新设置UI
 function updateSettingsUI(settings) {
   if (!settings) return;
@@ -272,6 +299,70 @@ function updatePetImages(settings) {
   }
 }
 
+function clampPercent(value) {
+  const number = Number(value);
+  if (!Number.isFinite(number)) return 0;
+  return Math.max(0, Math.min(100, number));
+}
+
+function formatPercent(value) {
+  return `${Math.round(clampPercent(value))}%`;
+}
+
+function formatCountdown(seconds) {
+  if (seconds == null) return '重置时间未知';
+  if (seconds <= 0) return '现在重置';
+  const days = Math.floor(seconds / 86400);
+  const hours = Math.floor((seconds % 86400) / 3600);
+  const minutes = Math.floor((seconds % 3600) / 60);
+  if (days > 0) return `${days}d ${hours}h 后重置`;
+  if (hours > 0) return `${hours}h ${minutes}m 后重置`;
+  return `${minutes}m 后重置`;
+}
+
+function usageTone(remainingPercent) {
+  if (remainingPercent <= 15) return 'danger';
+  if (remainingPercent <= 35) return 'warning';
+  return '';
+}
+
+function updateMeter(bucket, valueEl, barEl, resetEl) {
+  if (!valueEl || !barEl || !resetEl) return;
+
+  if (!bucket) {
+    valueEl.textContent = '--';
+    barEl.style.width = '0%';
+    barEl.classList.remove('warning', 'danger');
+    resetEl.textContent = '等待 Codex 额度数据';
+    return;
+  }
+
+  const remaining = clampPercent(bucket.remainingPercent);
+  valueEl.textContent = `${formatPercent(remaining)} 剩余`;
+  barEl.style.width = `${remaining}%`;
+  barEl.classList.remove('warning', 'danger');
+  const tone = usageTone(remaining);
+  if (tone) barEl.classList.add(tone);
+  resetEl.textContent = formatCountdown(bucket.countdownSeconds);
+}
+
+function updateCodexUsage(data) {
+  if (!codexSource || !codexPlan) return;
+
+  if (!data || (!data.primary && !data.secondary)) {
+    codexSource.textContent = '等待数据';
+    codexPlan.textContent = '--';
+    updateMeter(null, codexPrimaryValue, codexPrimaryBar, codexPrimaryReset);
+    updateMeter(null, codexSecondaryValue, codexSecondaryBar, codexSecondaryReset);
+    return;
+  }
+
+  codexSource.textContent = data.source === 'live' ? '实时数据' : '本地日志';
+  codexPlan.textContent = data.planType || 'Codex';
+  updateMeter(data.primary, codexPrimaryValue, codexPrimaryBar, codexPrimaryReset);
+  updateMeter(data.secondary, codexSecondaryValue, codexSecondaryBar, codexSecondaryReset);
+}
+
 // 显示保存成功提示
 function showSavedNotice() {
   const notice = document.createElement('div');
@@ -311,6 +402,10 @@ ipcRenderer.on('pet-action-updated', (event, state) => {
   updatePetImages(state);
 });
 
+ipcRenderer.on('codex-usage-update', (event, data) => {
+  updateCodexUsage(data);
+});
+
 // 处理宠物互动
 function handleInteraction(action) {
   ipcRenderer.send('pet-interaction', action);
@@ -338,6 +433,12 @@ if (petBtn) {
 if (sleepBtn) {
   sleepBtn.addEventListener('click', () => {
     handleInteraction('sleep');
+  });
+}
+
+if (codexRefreshBtn) {
+  codexRefreshBtn.addEventListener('click', () => {
+    loadCodexUsage();
   });
 }
 
@@ -491,6 +592,7 @@ document.addEventListener('mousedown', (e) => {
       !e.target.closest('.task-item') &&
       !e.target.closest('.log-item') &&
       !e.target.closest('.refresh-btn') &&
+      !e.target.closest('.codex-refresh-btn') &&
       !e.target.closest('.skin-item') &&
       !e.target.closest('.avatar-container')) {
     // 通知主进程允许拖动
@@ -515,6 +617,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // 加载宠物状态
   loadPetStatus();
   loadSettings();
+  loadCodexUsage();
 
   // 加载主题偏好
   ipcRenderer.send('get-theme-preference');
