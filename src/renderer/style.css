@@ -249,4 +249,18 @@ html, body {
   80% { transform: translate(-50%, -50%) scale(0.98); }
   90% { transform: translate(-50%, -50%) scale(1.01); }
   100% { transform: translate(-50%, -50%) scale(1); }
+}
+
+/* 海里皮肤漂浮动画 */
+@keyframes oceanFloat {
+  0%   { transform: translate(-50%, -50%) rotate(0deg) translateY(0px); }
+  20%  { transform: translate(-48%, -52%) rotate(3deg) translateY(-6px); }
+  40%  { transform: translate(-50%, -48%) rotate(-2deg) translateY(-10px); }
+  60%  { transform: translate(-52%, -50%) rotate(-4deg) translateY(-4px); }
+  80%  { transform: translate(-50%, -47%) rotate(2deg) translateY(-12px); }
+  100% { transform: translate(-50%, -50%) rotate(0deg) translateY(0px); }
+}
+
+.ocean-float {
+  animation: oceanFloat 4s ease-in-out infinite !important;
 } 

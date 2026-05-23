@@ -86,6 +86,12 @@ function initPet() {
 function applySkin(settings) {
   const imagePath = getSkinImagePath(settings);
   pet.style.backgroundImage = `url("${pathToFileURL(imagePath).href}")`;
+
+  if (settings.skin === '海里') {
+    pet.classList.add('ocean-float');
+  } else {
+    pet.classList.remove('ocean-float');
+  }
 }
 
 // 显示消息框
@@ -121,15 +127,13 @@ function handleInteract() {
   // 随机选择一个互动短语
   const randomInteraction = interactions[Math.floor(Math.random() * interactions.length)];
   
-  showMessage(randomInteraction);
-  
   const actions = ['shake', 'bounce', 'flip'];
   const randomAction = actions[Math.floor(Math.random() * actions.length)];
   pet.classList.add(randomAction);
   setTimeout(() => {
     pet.classList.remove(randomAction);
   }, 1000);
-  
+
   // 隐藏互动按钮
   interactionButtons.classList.add('hidden');
 }
@@ -139,8 +143,13 @@ function handleDailyQuote() {
   // 随机选择一条名言
   const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
   
-  showMessage(`今日金句：\n"${randomQuote}"`);
-  
+  const actions = ['shake', 'bounce', 'flip'];
+  const randomAction = actions[Math.floor(Math.random() * actions.length)];
+  pet.classList.add(randomAction);
+  setTimeout(() => {
+    pet.classList.remove(randomAction);
+  }, 1000);
+
   // 隐藏互动按钮
   interactionButtons.classList.add('hidden');
 }

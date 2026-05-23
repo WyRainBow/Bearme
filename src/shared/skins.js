@@ -6,7 +6,9 @@ const PRESET_SKINS = {
   默认: 'assets/pet.png',
   奔跑: 'assets/自嘲熊run.gif',
   工作: 'assets/自嘲熊work.gif',
-  睡醒: 'assets/自嘲熊睡醒.gif'
+  睡醒: 'assets/自嘲熊睡醒.gif',
+  贴纸: 'assets/自嘲熊sticker.gif',
+  海里: 'assets/自嘲熊海里.jpg'
 };
 
 function normalizeSkinSettings(settings = {}) {
